@@ -1,0 +1,62 @@
+= form_for(@plan) do |f| 
+	- if @plan.errors.any? 
+		#error_explanation
+			%h2= "#{pluralize(@plan.errors.count, "error")} prohibited this plan from being saved:"
+
+			%ul
+				-@plan.errors.full_messages.each do |msg| 
+					%li= msg
+  
+
+	.field
+		= f.label :name
+		%br 
+		= f.text_field :name 
+   
+	.field
+		= f.label :price
+		%br
+		= f.text_field :price
+		
+	.field
+		= f.label :billing_period
+		%br 
+		= f.select :billing_period, Plan::BILLING_PERIODS, :include_blank => false
+  
+	= text_field_tag "attribute_name"
+	= link_to "Add attribute", "#", :id => "add_attribute"
+	%br
+
+	#optional_attributes
+		-begin	
+			- @plan.dynamic_attributes.each do |da|
+				= f.label da[0].gsub("field_", "")
+				= text_field_tag "plan[#{da[0]}]",  da[1]
+				%br
+		- rescue
+
+
+	
+	/ = f.label "field_testing"
+	/ = test_field_tag "plan[]"
+	/ = text_field_tag "plan[field_testing]"
+		
+
+
+	.actions
+		= f.submit 
+	
+	:javascript
+		$(document).ready(function(){
+			$('#add_attribute').click(function(event) {
+				event.preventDefault();
+				if ($('#attribute_name').val() == '') {
+					alert("You must give your attribute a name.");
+				} else {
+					$('#optional_attributes').append("<br><label>" + $('#attribute_name').val() +"</label><input name='plan[field_" + $('#attribute_name').val() +"]'>");
+				}
+			})
+		})
+		
+
+
