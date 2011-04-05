@@ -11,18 +11,17 @@ gem 'jeweler'
 # gem 'ruby-debug'
 gem 'ruby-debug19'
 gem "jquery-rails"
-
 gem "dynamic_attributes"
+gem 'active_merchant'
+gem 'simple_form'
 group :development, :test do
-    gem "autotest"
-		gem "factory_girl_rails", ">= 1.0.1"
-		gem "rspec-rails", ">= 2.0.0.beta"
-    gem "capybara", ">= 0.3.9"
-    gem 'database_cleaner'
-    gem 'cucumber-rails'
-    gem 'cucumber'
-    gem 'spork'
-    gem 'launchy'
-		gem 'pickle'
-		gem 'shoulda'
+  gem "autotest"
+	gem "factory_girl_rails", ">= 1.0.1"
+	gem "rspec-rails", ">= 2.0.0.beta"
+  gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
+  gem 'database_cleaner'
+  gem 'spork'
+  gem 'launchy'
+
+	gem 'shoulda'
 end

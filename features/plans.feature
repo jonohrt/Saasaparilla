@@ -5,7 +5,7 @@ Feature: Manage Plans
   Scenario: Plans List
 
     Given a plan exists with name: "Gold", price: 12.99, billing_period: "monthly"
-		And a plan exists with name: "Silver", price: 12.99, billing_period: "monthly"
+	And a plan exists with name: "Silver", price: 12.99, billing_period: "monthly"
     When I go to the plans page
     Then I should see "Gold"
     And I should see "Silver"

@@ -2,6 +2,7 @@ class CreateBillingProfiles < ActiveRecord::Migration
   def self.up
     create_table :billing_profiles do |t|
       t.integer :billable_id
+      t.string :billable_type
       t.integer :customer_cim_id
       t.integer :customer_payment_profile_id
 

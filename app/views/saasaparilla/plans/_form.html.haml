@@ -53,7 +53,7 @@
 				if ($('#attribute_name').val() == '') {
 					alert("You must give your attribute a name.");
 				} else {
-					$('#optional_attributes').append("<br><label>" + $('#attribute_name').val() +"</label><input name='plan[field_" + $('#attribute_name').val() +"]'>");
+					$('#optional_attributes').append("<br><label>" + $('#attribute_name').val() +"</label><input name='plan[field_" + $('#attribute_name').val() +"]' id='field_" + $('#attribute_name').val() +"'>");
 				}
 			})
 		})

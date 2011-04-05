@@ -4,6 +4,7 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 #require "rails/test_help"
 require "rspec/rails"
+
 require 'shoulda'
 require 'factory_girl_rails'
 Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
@@ -16,9 +17,11 @@ Rails.backtrace_cleaner.remove_silencers!
 
 # Configure capybara for integration testing
 require "capybara/rails"
+require 'capybara/rspec'
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
+require 'database_cleaner'
 # Run any available migration
 ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
@@ -33,4 +36,18 @@ RSpec.configure do |config|
 
   # == Mock Framework
   config.mock_with :rspec
+  
+  config.use_transactional_fixtures = false
+  
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 end

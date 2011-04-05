@@ -1,4 +1,7 @@
 class Saasaparilla::PlansController < ApplicationController
+  unloadable
+  
+  layout 'saasaparilla'
   # GET /plans
   # GET /plans.xml
   def index

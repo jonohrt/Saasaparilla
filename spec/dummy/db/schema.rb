@@ -10,10 +10,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110403012641) do
+ActiveRecord::Schema.define(:version => 20110404214729) do
 
   create_table "billing_profiles", :force => true do |t|
     t.integer  "billable_id"
+    t.string   "billable_type"
     t.integer  "customer_cim_id"
     t.integer  "customer_payment_profile_id"
     t.datetime "created_at"
@@ -26,6 +27,12 @@ ActiveRecord::Schema.define(:version => 20110403012641) do
     t.integer  "subscription_id"
     t.float    "price"
     t.text     "dynamic_attributes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
