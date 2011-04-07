@@ -1,0 +1,14 @@
+%h2 Billing info
+
+= f.input :first_name
+= f.input :last_name
+= f.input :card_type, :collection => CreditCard::CARD_TYPES, :include_blank => false
+- if f.object.new_record?
+	= f.input :card_number
+- else
+	= f.input :card_number, :input_html => {:value => ""}
+= f.input :expiry_month, :collection => CreditCard::MONTHS
+= f.input :expiry_year, :collection => CreditCard::YEARS
+= f.input :card_verification
+
+

@@ -5,7 +5,8 @@ class Plan < ActiveRecord::Base
   validates_numericality_of :price, :message => "is not a number"
   validates_presence_of :price, :message => "can't be blank"
   
-
+  has_many :subscriptions
+  
   BILLING_PERIODS = ["Monthly", "Anually"]
 
   def method_missing(method, *args)

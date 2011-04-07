@@ -10,15 +10,57 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110404214729) do
+ActiveRecord::Schema.define(:version => 20110406223405) do
 
-  create_table "billing_profiles", :force => true do |t|
+  create_table "accounts", :force => true do |t|
     t.integer  "billable_id"
     t.string   "billable_type"
+    t.float    "balance"
+    t.string   "status"
     t.integer  "customer_cim_id"
     t.integer  "customer_payment_profile_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "billing_activities", :force => true do |t|
+    t.float   "amount"
+    t.string  "message"
+    t.integer "account_id"
+  end
+
+  create_table "contact_infos", :force => true do |t|
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "email"
+    t.string  "company"
+    t.string  "address"
+    t.string  "city"
+    t.string  "state"
+    t.string  "zip"
+    t.string  "country"
+    t.string  "phone_number"
+    t.integer "account_id"
+  end
+
+  create_table "credit_cards", :force => true do |t|
+    t.string  "expiration_date"
+    t.string  "card_number"
+    t.integer "account_id"
+  end
+
+  create_table "invoice_line_items", :force => true do |t|
+    t.string  "description"
+    t.date    "from"
+    t.date    "to"
+    t.float   "price"
+    t.integer "invoice_id"
+  end
+
+  create_table "invoices", :force => true do |t|
+    t.float   "total"
+    t.integer "invoice_number"
+    t.integer "billing_activity_id"
   end
 
   create_table "plans", :force => true do |t|
@@ -27,6 +69,26 @@ ActiveRecord::Schema.define(:version => 20110404214729) do
     t.integer  "subscription_id"
     t.float    "price"
     t.text     "dynamic_attributes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subscriptions", :force => true do |t|
+    t.string   "status"
+    t.integer  "account_id"
+    t.integer  "plan_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transactions", :force => true do |t|
+    t.string   "action"
+    t.integer  "amount"
+    t.boolean  "success"
+    t.string   "authorization"
+    t.string   "message"
+    t.text     "params"
+    t.integer  "billing_activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

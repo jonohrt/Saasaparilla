@@ -1,6 +1,6 @@
 module Billable
   def is_billable
-    has_one :billing_profile, :as=>:billable, :dependent=>:destroy
+    has_one :account, :as=> :billable, :dependent=>:destroy
     include InstanceMethods
   end
   module InstanceMethods

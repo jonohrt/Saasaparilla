@@ -21,6 +21,7 @@ describe 'Plans' do
       click_button "Create"
       page.should have_content("Plan was successfully created.")
       page.should have_content("Silver")
+      
     end
     
   end

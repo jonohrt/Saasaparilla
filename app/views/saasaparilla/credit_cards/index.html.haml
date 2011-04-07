@@ -1,0 +1,11 @@
+%h1 Update your credit card
+
+%h2 Current card
+= @credit_card.card_number
+%br
+= "Exp: #{@credit_card.expiration_date}"
+	
+%h2 Update card
+= simple_form_for [@account, @credit_card] do |f|
+	= render :partial => 'saasaparilla/accounts/credit_card_form', :locals => {:f => f}
+	= f.submit "Update Card"

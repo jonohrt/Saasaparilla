@@ -15,8 +15,7 @@ module Saasaparilla
       end
 
       def copy_migrations
-        migration_template "create_billing_profiles.rb", "db/migrate/create_billing_profiles.rb"
-        migration_template "create_plans.rb", "db/migrate/create_plans.rb"
+        migration_template "create_saasaparilla_tables.rb", "db/migrate/create_saasaparilla_tables.rb"
       
       end
     end

@@ -12,8 +12,11 @@ gem 'jeweler'
 gem 'ruby-debug19'
 gem "jquery-rails"
 gem "dynamic_attributes"
+gem "authlogic"
 gem 'active_merchant'
 gem 'simple_form'
+gem 'dynamic_form'
+gem 'state_machine'
 group :development, :test do
   gem "autotest"
 	gem "factory_girl_rails", ">= 1.0.1"

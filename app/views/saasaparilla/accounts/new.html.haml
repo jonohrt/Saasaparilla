@@ -1,0 +1,14 @@
+%h1 Create Account
+	
+= simple_form_for @account do |f|
+
+	= f.simple_fields_for :contact_info, @account.contact_info do |cif|
+		= render :partial => 'contact_info_form', :locals => {:f => cif}
+	
+	= f.simple_fields_for :credit_card, @account.credit_card do |cf|
+		= render :partial => 'credit_card_form', :locals => {:f => cf}
+	
+	= f.simple_fields_for :subscription, @account.subscription do |sf|
+		= render :partial => 'subscription_form', :locals => {:f => sf}
+		
+	= f.submit "Create Account"
