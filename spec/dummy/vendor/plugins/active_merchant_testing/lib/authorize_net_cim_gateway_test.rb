@@ -42,7 +42,7 @@ class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGatew
   def commit(action, request)
     url = test? ? test_url : live_url
     #xml = ssl_post(url, request, "Content-Type" => "text/xml")
-    if @success == false && action == :create_customer_profile_transaction
+    if @success == false && (action == :create_customer_profile_transaction || action == :update_customer_payment_profile)
         xml = eval("unsuccessful_#{action}_response_xml")
     else
         xml = eval("successful_#{action}_response_xml")
@@ -373,6 +373,26 @@ class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGatew
       </updateCustomerPaymentProfileResponse>
     XML
   end
+  
+  def unsuccessful_update_customer_payment_profile_response_xml(transaction_type = :auth_capture)
+    <<-XML
+      <?xml version="1.0" encoding="utf-8" ?>
+      <updateCustomerPaymentProfileResponse
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+        <refId>refid1</refId>
+        <messages>
+          <resultCode>Error</resultCode>
+          <message>
+            <code>E00027</code>
+            <text>The transaction was unsuccessful.</text>
+          </message>
+        </messages>
+        <directResponse>#{UNSUCCESSUL_DIRECT_RESPONSE[:refund]}</directResponse>
+      </updateCustomerPaymentProfileResponse>
+    XML
+  end
 
   def successful_update_customer_shipping_address_response_xml
     <<-XML
@@ -446,6 +466,9 @@ class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGatew
     XML
   end
 
+
+
+  
   def successful_validate_customer_payment_profile_response_xml
     <<-XML
       <?xml version="1.0" encoding="utf-8" ?>

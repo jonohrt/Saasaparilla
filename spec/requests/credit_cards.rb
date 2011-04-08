@@ -57,6 +57,7 @@ describe 'CreditCard' do
       select (Date.today.year + 1).to_s, :from => "Expiry year"
     
       click_on("Update Card")
+      save_and_open_page
       page.should have_content("The transaction was unsuccessful.")
       GATEWAYCIM.success= true
     end
