@@ -1,6 +1,7 @@
 class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGateway
-
+  attr_accessor :success
   def initialize(options = {})
+    @success = true
     @options = {:login => "X", :password => "Y"}
     @test_amount = 100
     @test_customer_profile_id = '3187'
@@ -41,7 +42,11 @@ class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGatew
   def commit(action, request)
     url = test? ? test_url : live_url
     #xml = ssl_post(url, request, "Content-Type" => "text/xml")
-    xml = eval("successful_#{action}_response_xml")
+    if @success == false && action == :create_customer_profile_transaction
+        xml = eval("unsuccessful_#{action}_response_xml")
+    else
+        xml = eval("successful_#{action}_response_xml")
+    end
 
     response_params = parse(action, xml)
 
@@ -389,6 +394,12 @@ class AuthorizeNetCimGatewayTest < ActiveMerchant::Billing::AuthorizeNetCimGatew
   end
 
   SUCCESSFUL_DIRECT_RESPONSE = {
+    :auth_only => '1,1,1,This transaction has been approved.,Gw4NGI,Y,508223659,,,100.00,CC,auth_only,Up to 20 chars,,,,,,,,,,,Up to 255 Characters,,,,,,,,,,,,,,6E5334C13C78EA078173565FD67318E4,,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,',
+    :capture_only => '1,1,1,This transaction has been approved.,,Y,508223660,,,100.00,CC,capture_only,Up to 20 chars,,,,,,,,,,,Up to 255 Characters,,,,,,,,,,,,,,6E5334C13C78EA078173565FD67318E4,,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,',
+    :auth_capture => '1,1,1,This transaction has been approved.,d1GENk,Y,508223661,32968c18334f16525227,Store purchase,1.00,CC,auth_capture,,Longbob,Longsen,,,,,,,,,,,,,,,,,,,,,,,269862C030129C1173727CC10B1935ED,P,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,'
+  }
+  
+  UNSUCCESSUL_DIRECT_RESPONSE = {
     :auth_only => '1,1,1,This transaction has been approved.,Gw4NGI,Y,508223659,,,100.00,CC,auth_only,Up to 20 chars,,,,,,,,,,,Up to 255 Characters,,,,,,,,,,,,,,6E5334C13C78EA078173565FD67318E4,,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,',
     :capture_only => '1,1,1,This transaction has been approved.,,Y,508223660,,,100.00,CC,capture_only,Up to 20 chars,,,,,,,,,,,Up to 255 Characters,,,,,,,,,,,,,,6E5334C13C78EA078173565FD67318E4,,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,',
     :auth_capture => '1,1,1,This transaction has been approved.,d1GENk,Y,508223661,32968c18334f16525227,Store purchase,1.00,CC,auth_capture,,Longbob,Longsen,,,,,,,,,,,,,,,,,,,,,,,269862C030129C1173727CC10B1935ED,P,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,'

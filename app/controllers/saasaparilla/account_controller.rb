@@ -14,7 +14,7 @@ class Saasaparilla::AccountController < ApplicationController
   def create
     @account = current_billable.build_account(params[:account])
     
-  
+    begin
       if @account.save
         redirect_to account_path(@account)
         flash[:notice] = "Your account was successfully created."
@@ -23,7 +23,12 @@ class Saasaparilla::AccountController < ApplicationController
         flash[:error] = "Your account could not be created due to errors. Please review the form and correct them."
       
       end
-  
+      
+    rescue Exception => e
+        flash[:error] = e.message
+        render :action => "new"
+        flash.discard
+    end
   end
   
   def show

@@ -33,6 +33,7 @@ describe 'Accounts' do
       
     it "should fail with declined card" do
       visit new_account_path
+      GATEWAYCIM.success = false
       fill_in "account_contact_info_attributes_first_name", :with => "Bob"
       fill_in "account_contact_info_attributes_last_name", :with => "Jones"
       fill_in "Email", :with => "bobjones@123.com"
@@ -51,6 +52,8 @@ describe 'Accounts' do
       select Date.today.year.to_s, :from => "Expiry year"
       choose 'Gold'
       click_on 'Create Account'
+      page.should have_content("The transaction was unsuccessful.")
+      GATEWAYCIM.success = true
     end
     
     

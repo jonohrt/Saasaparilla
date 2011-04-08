@@ -89,6 +89,7 @@ class Account < ActiveRecord::Base
                                                :amount => amount,
                                                :customer_profile_id => customer_cim_id,
                                                :customer_payment_profile_id => customer_payment_profile_id})
+
     transaction = self.transactions.create(:action => "purchase", :amount => amount, :response => response, :account => self)
     if response.success?
       self.update_attributes(:balance => 0.0)
