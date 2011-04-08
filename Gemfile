@@ -8,8 +8,9 @@ gem 'haml'
 gem 'jeweler'
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-gem 'ruby-debug19'
+gem 'ruby-debug'
+#gem 'ruby-debug19'
+
 gem "jquery-rails"
 gem "dynamic_attributes"
 gem "authlogic"
@@ -18,13 +19,13 @@ gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'
 group :development, :test do
-  gem "autotest"
-	gem "factory_girl_rails", ">= 1.0.1"
-	gem "rspec-rails"
+  gem "autotest-rails"
+  gem "factory_girl_rails", ">= 1.0.1"
+  gem "rspec-rails"
   gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
   gem 'database_cleaner'
   gem 'spork'
   gem 'launchy'
-
-	gem 'shoulda'
+  gem 'shoulda'
+  gem 'ZenTest'
 end
