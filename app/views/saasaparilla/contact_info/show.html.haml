@@ -1,0 +1,6 @@
+%h1 Update Contact Info
+
+= simple_form_for [@account, @contact_info] do |f|
+	= render :partial => "saasaparilla/account/contact_info_form", :locals =>{:f => f}
+	
+	= f.submit "Update Contact Info"

@@ -1,6 +1,6 @@
 %h1 Create Account
 	
-= simple_form_for @account do |f|
+= simple_form_for @account, :url => account_path do |f|
 
 	= f.simple_fields_for :contact_info, @account.contact_info do |cif|
 		= render :partial => 'contact_info_form', :locals => {:f => cif}

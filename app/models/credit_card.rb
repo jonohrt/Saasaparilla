@@ -21,6 +21,8 @@ class CreditCard < ActiveRecord::Base
   
   before_save :mask_card_number
   before_save :create_expiration_date
+  before_save :update_payment_profile
+  
   def validate_card
     unless active_merchant_card.valid?
         active_merchant_card.errors.full_messages.each do |message|
@@ -68,6 +70,7 @@ class CreditCard < ActiveRecord::Base
   
   
   def mask_card_number
+    
     length = card_number.length
     masked_number = ""
     (1..(length - 4)).each do
@@ -76,6 +79,25 @@ class CreditCard < ActiveRecord::Base
     masked_number << card_number[length - 4, length]
     self.card_number = masked_number
   end
+  
+  def update_payment_profile
+    unless new_record?
+      @profile = {:customer_profile_id => account.customer_cim_id,
+                    :payment_profile => {:customer_payment_profile_id => account.customer_payment_profile_id, 
+                                         :bill_to => account.contact_info.to_hash, 
+                                         :payment =>  {:credit_card => active_merchant_card}
+                    }
+                }
+        
+        response = GATEWAYCIM.update_customer_payment_profile(@profile)
+        if response.success?
+          return true
+        else
+          raise response.message
+          return false
+        end
+      end
+    end
 
 
 end

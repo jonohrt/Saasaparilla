@@ -50,6 +50,11 @@ Factory.define :subscription, :class => Subscription do |f|
   f.association :plan
 end
 
+Factory.define :billing_activity, :class => BillingActivity do |f|
+  f.created_at Time.now
+  f.amount 12.00
+  f.message "Thanks for your payment"
+end
 Factory.define :user, :class => User do |f|
   f.name "Ted"
   
@@ -64,4 +69,5 @@ Factory.define :account_with_all, :parent => :account do |account|
   end
   
 end
+
 

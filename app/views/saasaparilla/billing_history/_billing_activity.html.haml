@@ -1,0 +1,4 @@
+%tr
+	%td= billing_activity.created_at.to_date.to_s(:month_day_year)
+	%td= billing_activity.message
+	%td= number_to_currency(billing_activity.amount)

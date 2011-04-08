@@ -20,7 +20,7 @@ gem 'state_machine'
 group :development, :test do
   gem "autotest"
 	gem "factory_girl_rails", ">= 1.0.1"
-	gem "rspec-rails", ">= 2.0.0.beta"
+	gem "rspec-rails"
   gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
   gem 'database_cleaner'
   gem 'spork'

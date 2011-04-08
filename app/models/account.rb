@@ -14,20 +14,22 @@ class Account < ActiveRecord::Base
   before_create :create_payment_profile
   before_validation :set_status, :on => :create
   before_create :set_initial_balance
-  after_rollback :do_something
+  after_rollback :delete_profile
+  after_create :do_inital_billing
   
   
-  def bill!
+  def do_inital_billing
     amount = balance
     if charge_amount(balance)
       self.update_attributes(:status => :ok) if !ok?
-        
-    else
-      self.update_attributes(:status => :overdue)
     end
   end
   
   private
+  
+  
+
+  
   
   def create_cim_profile
     #Login to the gateway using your credentials in environment.rb
@@ -87,18 +89,20 @@ class Account < ActiveRecord::Base
                                                :amount => amount,
                                                :customer_profile_id => customer_cim_id,
                                                :customer_payment_profile_id => customer_payment_profile_id})
-    
     transaction = self.transactions.create(:action => "purchase", :amount => amount, :response => response, :account => self)
     if response.success?
       self.update_attributes(:balance => 0.0)
       return true
     else
+      raise response.message
       return false
     end
   end
   
-  def do_something
-    response = GATEWAYCIM::delete_customer_profile(:customer_profile_id => self.customer_cim_id) if customer_cim_id
+  def delete_profile
+    if new_record?
+      response = GATEWAYCIM::delete_customer_profile(:customer_profile_id => self.customer_cim_id) if customer_cim_id
+    end
   end
   
 end

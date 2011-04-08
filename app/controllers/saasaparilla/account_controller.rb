@@ -1,8 +1,8 @@
-class Saasaparilla::AccountsController < ApplicationController
+class Saasaparilla::AccountController < ApplicationController
   unloadable
   #overide with authorization
   def new
-    @account = Account.new
+    @account = current_billable.build_account
     @account.build_contact_info
     @account.build_credit_card
     @subscription = @account.build_subscription
@@ -12,11 +12,11 @@ class Saasaparilla::AccountsController < ApplicationController
   
   
   def create
-    @account = Account.new(params[:account])
+    @account = current_billable.build_account(params[:account])
     
   
       if @account.save
-        redirect_to edit_account_path(@account)
+        redirect_to account_path(@account)
         flash[:notice] = "Your account was successfully created."
       else
         render :action => "new"
@@ -26,7 +26,7 @@ class Saasaparilla::AccountsController < ApplicationController
   
   end
   
-  def edit
+  def show
     
   end
 end

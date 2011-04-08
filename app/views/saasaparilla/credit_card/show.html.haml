@@ -7,5 +7,5 @@
 	
 %h2 Update card
 = simple_form_for [@account, @credit_card] do |f|
-	= render :partial => 'saasaparilla/accounts/credit_card_form', :locals => {:f => f}
+	= render :partial => 'saasaparilla/account/credit_card_form', :locals => {:f => f}
 	= f.submit "Update Card"

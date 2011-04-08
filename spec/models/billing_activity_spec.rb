@@ -6,16 +6,16 @@ describe BillingActivity do
   
   describe 'on charge' do
     before(:each) do
-       plan = Factory(:plan, :name => "Gold", :price => 20)
-       contact_info = Factory(:contact_info)
-       subscription = Factory(:subscription, :plan => plan)
-       credit_card = Factory(:credit_card)
+       plan = Factory.build(:plan, :name => "Gold", :price => 20)
+       contact_info = Factory.build(:contact_info)
+       subscription = Factory.build(:subscription, :plan => plan)
+       credit_card = Factory.build(:credit_card)
        @account = Factory(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
     end
     
     it 'should create a new billing activity on successful charge' do
-      @account.bill!
-      @account.billing_activities.count.should == 1
+      @account.do_inital_billing
+      @account.billing_activities.count.should == 2
     
     end
   end

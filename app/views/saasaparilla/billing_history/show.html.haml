@@ -1,0 +1,10 @@
+%h1 Billing History
+
+%table
+	%tr
+		%th Date
+		%th Description
+		%th Amount
+		
+	= render :partial => "billing_activity", :collection => @billing_activities
+		
