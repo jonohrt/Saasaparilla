@@ -1,0 +1,7 @@
+%p
+	Payment Amount: 
+	= number_to_currency(@payment.amount)
+	
+%p
+	Payment Date:
+	= @payment.updated_at.to_s(:month_day_year)

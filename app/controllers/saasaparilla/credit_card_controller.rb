@@ -21,7 +21,6 @@ class Saasaparilla::CreditCardController < ApplicationController
         flash[:error] = "Your credit card could not be updated due to errors. Please review the form and correct them."
       end
      rescue Exception => e
-       debugger
           flash[:error] = e.message
           render :action => "show"
           flash.discard

@@ -1,11 +1,12 @@
 Factory.define :account, :class => Account do |f|
   f.customer_cim_id 
   f.customer_payment_profile_id
-  f.balance
+  f.balance 10
   f.status
   f.association :credit_card
   f.association :contact_info 
   f.association :subscription
+
 
 end
 
@@ -44,6 +45,10 @@ Factory.define :plan, :class => Plan do |f|
   
 end
 
+Factory.define :payment, :class => Payment do |f| 
+  f.status
+  f.amount 20.00
+end
 
 Factory.define :subscription, :class => Subscription do |f|
   f.status

@@ -1,0 +1,9 @@
+%h1 Make a Payment
+
+%strong Current Balance
+= number_to_currency(@account.balance)
+
+= simple_form_for [@account, @payment] do |f|
+	= f.input :amount 
+	= f.submit "Submit" 
+

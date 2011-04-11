@@ -1,7 +1,8 @@
 class Account < ActiveRecord::Base
   
-  has_statuses :ok, :overdue, :suspended
+  has_statuses "ok", "overdue", "suspended"
   has_many :transactions
+  has_many :payments
   has_one :subscription
   accepts_nested_attributes_for :subscription
   has_one :contact_info
@@ -15,20 +16,25 @@ class Account < ActiveRecord::Base
   before_validation :set_status, :on => :create
   before_create :set_initial_balance
   after_rollback :delete_profile
-  after_create :do_inital_billing
+  after_create :bill!
   
   
-  def do_inital_billing
-    amount = balance
-    if charge_amount(balance)
-      self.update_attributes(:status => :ok) if !ok?
+
+  
+  def bill!(bill_amount = nil)
+    bill_amount ||= balance
+    if charge_amount(bill_amount)
+      set_status_ok if balance == 0.0
+      return true
     end
   end
   
   private
   
   
-
+  def set_status_ok
+    self.update_attributes(:status => "ok") if !ok?
+  end
   
   
   def create_cim_profile
@@ -76,7 +82,7 @@ class Account < ActiveRecord::Base
   end
   
   def set_status
-    self.status = :ok
+    self.status = "ok"
   end
   
   def set_initial_balance
@@ -92,7 +98,7 @@ class Account < ActiveRecord::Base
 
     transaction = self.transactions.create(:action => "purchase", :amount => amount, :response => response, :account => self)
     if response.success?
-      self.update_attributes(:balance => 0.0)
+      self.update_attributes(:balance => balance - amount)
       return true
     else
       raise response.message

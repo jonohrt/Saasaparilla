@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :account, :controller => "saasaparilla/account"
   
   scope '/account', :name_prefix => 'account' do
+    resources :payments, :controller => "saasaparilla/payments" 
     resource :credit_card, :controller => "saasaparilla/credit_card"
     resource :contact_info, :controller => "saasaparilla/contact_info"
     resource :billing_history, :controller => "saasaparilla/billing_history" 

@@ -11,5 +11,6 @@ class ActiveRecord::Base
         status == status_name
       end
     end 
+    
   end
 end

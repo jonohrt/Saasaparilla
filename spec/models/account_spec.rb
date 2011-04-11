@@ -51,7 +51,7 @@ describe Account do
       @account.save
       @account.stub!(:charge_amount).with(@account.balance).and_return true
       
-      @account.do_inital_billing
+      @account.bill!
       @account.ok?.should == true
     end
     
@@ -66,14 +66,14 @@ describe Account do
     
     it 'should return set account balance to 0 on successful charge' do
        @account.save
-       @account.do_inital_billing
+       @account.bill!
        @account.balance.should == 0
        
     end
     
     it 'should keep status at :ok on successful charge' do
        @account.save
-       @account.do_inital_billing
+       @account.bill!
        @account.ok?.should == true
        
     end
@@ -82,6 +82,44 @@ describe Account do
       @account.should_receive(:charge_amount).with(20.0)
       @account.save
     end
+    
+    it 'should have an billing activity after inital charge' do
+      @account.save
+      @account.billing_activities.count.should == 1
+    end
+    
+    it 'should create a billing activity on charge' do
+      @account.save
+      @account.billing_activities.count.should == 1
+      @account.update_attributes(:balance => 30.0)
+      @account.bill!(30.00)
+      @account.billing_activities.count.should == 2
+      
+    end
+    it 'should subtract balance on bill!' do
+      @account.save
+      @account.billing_activities.count.should == 1
+      @account.update_attributes(:balance => 30.0)
+      @account.bill!(10.00)
+      @account.balance.should == 20.0
+    end
+    it 'should not change status if oustanding balance not paid' do
+      @account.save
+      @account.billing_activities.count.should == 1
+      @account.update_attributes(:balance => 30.0, :status => "overdue")
+      @account.bill!(10.00)
+      @account.status.should == "overdue"
+      
+    end
+    it 'should change status if oustanding balancepaid' do
+      @account.save
+      @account.billing_activities.count.should == 1
+      @account.update_attributes(:balance => 30.0, :status => "overdue")
+      @account.bill!(30.00)
+      @account.status.should == "ok"
+      
+    end
+    
    
    
     

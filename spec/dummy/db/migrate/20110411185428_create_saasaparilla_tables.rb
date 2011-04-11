@@ -54,7 +54,13 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.integer :account_id
       t.timestamps
     end
-    
+    create_table :payments do |t|
+      t.float :amount
+      t.integer :account_id
+      t.string :status
+      t.timestamps
+      
+    end
     create_table :invoices do |t|
       t.float :total
       t.integer :invoice_number

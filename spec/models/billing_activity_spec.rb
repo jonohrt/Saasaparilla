@@ -14,7 +14,7 @@ describe BillingActivity do
     end
     
     it 'should create a new billing activity on successful charge' do
-      @account.do_inital_billing
+      @account.bill!
       @account.billing_activities.count.should == 2
     
     end
