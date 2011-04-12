@@ -7,6 +7,8 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.string :status
       t.integer :customer_cim_id
       t.integer :customer_payment_profile_id
+      t.date :billing_date
+      t.date :invoiced_on
       
       t.timestamps
     end
@@ -97,6 +99,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
     drop_table :transactions
     drop_table :contact_infos
     drop_table :plans
+    drop_table :payments
     drop_table :invoices
     drop_table :invoice_line_items
     

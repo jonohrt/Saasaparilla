@@ -4,4 +4,9 @@ class BillingActivity < ActiveRecord::Base
   has_one :transaction
   
   MESSAGES = {:success => "Thank you for you payment."}
+  scope :recent, order("created_at DESC")
+  
+  scope :limit, lambda {|num|
+    limit(num)
+    }
 end

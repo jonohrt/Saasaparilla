@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110411185428) do
+ActiveRecord::Schema.define(:version => 20110412174732) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "billable_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20110411185428) do
     t.string   "status"
     t.integer  "customer_cim_id"
     t.integer  "customer_payment_profile_id"
+    t.date     "billing_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

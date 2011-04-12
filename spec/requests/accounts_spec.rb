@@ -51,12 +51,32 @@ describe 'Accounts' do
       select '10', :from => "Expiry month"
       select Date.today.year.to_s, :from => "Expiry year"
       choose 'Gold'
+      
       click_on 'Create Account'
       page.should have_content("The transaction was unsuccessful.")
       GATEWAYCIM.success = true
     end
     
     
+  end
+  describe 'DELETE /account' do
+    
+    before(:each) do
+      @plan = Factory.build(:plan, :name => "Gold", :price => 20)
+      @contact_info = Factory.build(:contact_info)
+      @subscription = Factory.build(:subscription, :plan => @plan)
+      @credit_card = Factory.build(:credit_card)
+      @account = Factory(:account, :contact_info => @contact_info, :subscription => @subscription, :credit_card => @credit_card)
+      @user = Factory(:user, :account => @account)
+
+    end
+    
+    
+    it 'should set account status to canceled' do
+      visit account_path
+      click_on "Cancel Account"
+      page.should have_content("Your account has been canceled.")
+    end
   end
   
 end

@@ -120,9 +120,70 @@ describe Account do
       
     end
     
+    it 'should set cancel status to pending_cancel' do
+      @account.save
+      @account.cancel
+      @account.status.should == "canceled"
    
-   
+    end
     
+    it 'should set billing date to next date on do recurring billing'
+    
+  end
+  
+  describe 'billing' do
+      before(:each) do
+          plan = Factory(:plan, :name => "Gold", :price => 20.0)
+          plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "yearly")
+          contact_info = Factory.build(:contact_info)
+          credit_card = Factory.build(:credit_card)
+          @account1 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today)
+          @account2 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today)
+          @account3 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today + 1.days)
+          @account4 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan2), :credit_card => credit_card, :billing_date => Date.today - 1.days)
+          @account1.update_attributes(:balance => 12)
+          @account2.update_attributes(:balance => 12)
+          @account3.update_attributes(:balance => 12)
+          @account4.update_attributes(:balance => 12)
+      end
+      
+      it 'should find all non canceled accounts' do
+        @account2.cancel
+        Account.active.count.should == 3
+      end
+      it 'should find billable models' do
+        @account1.update_attributes(:balance => 12)
+        @account2.update_attributes(:balance => 12)
+        @account3.update_attributes(:balance => 12)
+        @account4.update_attributes(:balance => 12)
+        Account.active.all_billable_accounts(Date.today).count.should == 3
+      end
+      it 'should find billable models' do
+        @account1.update_attributes(:balance => 0)
+        @account2.update_attributes(:balance => 12)
+        @account3.update_attributes(:balance => 12)
+        @account4.update_attributes(:balance => 12, :status => "canceled")
+        Account.active.all_billable_accounts(Date.today).count.should == 1
+      end
+    describe 'recurring billing' do
+    
+      it 'should reset charge account' do
+        Account.find_and_bill_recurring_accounts
+        @account1.billing_activities.count.should == 2
+        @account2.billing_activities.count.should == 2
+        @account3.billing_activities.count.should == 1
+        @account4.billing_activities.count.should == 2
+        
+        
+      end
+      it 'should set billing date to next month' do
+        Account.find_and_bill_recurring_accounts
+        @account1.billing_date.should == Date.today + 1.months
+        @account2.billing_date.should == Date.today + 1.months
+        @account4.billing_date.should == Date.today + 1.years
+      end
+      
+    end
   end
   
 

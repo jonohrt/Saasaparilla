@@ -14,7 +14,7 @@ describe 'CreditCard' do
     end
     
     it 'should load credit_card path' do
-      visit account_credit_card_path
+      visit edit_account_credit_card_path
       page.should have_content(@account.credit_card.card_number)
       page.should have_content(@account.credit_card.expiration_date)
     end
@@ -31,7 +31,7 @@ describe 'CreditCard' do
        @user = Factory(:user, :account => @account)
     end
     it 'should update credit card' do
-    visit account_credit_card_path
+    visit edit_account_credit_card_path
       fill_in "First name", :with => "Bob"
       fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"
@@ -47,7 +47,7 @@ describe 'CreditCard' do
     
     it 'should update credit card' do
       GATEWAYCIM.success= false
-      visit account_credit_card_path
+      visit edit_account_credit_card_path
       fill_in "First name", :with => "Bob"
       fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"

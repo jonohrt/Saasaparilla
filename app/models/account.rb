@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
   
-  has_statuses "ok", "overdue", "suspended"
+  has_statuses "ok", "overdue", "suspended", "pending_cancel", "canceled"
   has_many :transactions
   has_many :payments
   has_one :subscription
@@ -18,8 +18,23 @@ class Account < ActiveRecord::Base
   after_rollback :delete_profile
   after_create :bill!
   
+  scope :active, where("status != ?", "canceled")
   
+  scope :all_billable_accounts, lambda {|date|
+    where("billing_date BETWEEN ? and ? and balance > 0.0",  (date - 1.months).to_time, date.to_time)
+    }
 
+  class << self
+    def find_and_bill_recurring_accounts
+      #find_all_accounts need billing
+      @billable_accounts = Account.active.all_billable_accounts(Date.today)
+      for account in @billable_accounts
+        account.bill!(account.balance)
+        account.set_next_billing_date
+      end
+
+    end
+  end
   
   def bill!(bill_amount = nil)
     bill_amount ||= balance
@@ -29,11 +44,27 @@ class Account < ActiveRecord::Base
     end
   end
   
+  def cancel
+    set_canceled
+  end
+  def set_next_billing_date
+    if subscription.monthly?
+      self.update_attributes(:billing_date => billing_date + 1.months)
+    elsif subscription.anually?
+      self.update_attributes(:billing_date => billing_date + 1.years)
+    end
+  end
+  
   private
   
+
   
   def set_status_ok
     self.update_attributes(:status => "ok") if !ok?
+  end
+  
+  def set_canceled
+    self.update_attributes(:status => "canceled")
   end
   
   

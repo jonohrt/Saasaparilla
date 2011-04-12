@@ -1,5 +1,8 @@
 class Saasaparilla::AccountController < ApplicationController
   unloadable
+  
+  before_filter :get_account, :only => [:show, :destroy]
+  
   #overide with authorization
   def new
     @account = current_billable.build_account
@@ -16,7 +19,7 @@ class Saasaparilla::AccountController < ApplicationController
     
     begin
       if @account.save
-        redirect_to account_path(@account)
+        redirect_to account_path
         flash[:notice] = "Your account was successfully created."
       else
         render :action => "new"
@@ -32,6 +35,20 @@ class Saasaparilla::AccountController < ApplicationController
   end
   
   def show
-    
+
+  end
+  
+  
+  def destroy
+    if @account.cancel
+      flash[:notice] = "Your account has been canceled."
+      redirect_to account_path
+      
+    end
+  end
+  
+  private
+  def get_account
+    @account = current_billable.account
   end
 end
