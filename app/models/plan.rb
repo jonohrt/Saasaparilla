@@ -7,7 +7,7 @@ class Plan < ActiveRecord::Base
   
   has_many :subscriptions
   
-  BILLING_PERIODS = ["Monthly", "Anually"]
+  BILLING_PERIODS = ["Monthly", "Annually"]
 
   def method_missing(method, *args)
     

@@ -88,6 +88,10 @@ describe Account do
       @account.billing_activities.count.should == 1
     end
     
+    it 'should set invoice date after initial charge' 
+    
+    it 'should set billing date after inital charge'
+    
     it 'should create a billing activity on charge' do
       @account.save
       @account.billing_activities.count.should == 1
@@ -127,14 +131,14 @@ describe Account do
    
     end
     
-    it 'should set billing date to next date on do recurring billing'
+    
     
   end
   
   describe 'billing' do
       before(:each) do
           plan = Factory(:plan, :name => "Gold", :price => 20.0)
-          plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "yearly")
+          plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "annually")
           contact_info = Factory.build(:contact_info)
           credit_card = Factory.build(:credit_card)
           @account1 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today)
@@ -177,11 +181,17 @@ describe Account do
         
       end
       it 'should set billing date to next month' do
+        @billing_date1_old = @account1.billing_date
+        @billing_date2_old = @account2.billing_date
+        @billing_date4_old = @account4.billing_date
         Account.find_and_bill_recurring_accounts
-        @account1.billing_date.should == Date.today + 1.months
-        @account2.billing_date.should == Date.today + 1.months
-        @account4.billing_date.should == Date.today + 1.years
+        @account1.reload.billing_date.should == @billing_date1_old + 1.months
+        @account2.reload.billing_date.should == @billing_date2_old + 1.months
+        @account4.reload.billing_date.should == @billing_date4_old + 1.years
       end
+      
+      
+        
       
     end
   end

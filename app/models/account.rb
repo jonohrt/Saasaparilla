@@ -48,9 +48,11 @@ class Account < ActiveRecord::Base
     set_canceled
   end
   def set_next_billing_date
+    
     if subscription.monthly?
       self.update_attributes(:billing_date => billing_date + 1.months)
-    elsif subscription.anually?
+   
+    elsif subscription.annually?
       self.update_attributes(:billing_date => billing_date + 1.years)
     end
   end
