@@ -1,4 +1,10 @@
 %tr
-	%td= billing_activity.created_at.to_date.to_s(:month_day_year)
-	%td= billing_activity.message
-	%td= number_to_currency(billing_activity.amount)
+	%td
+		= billing_activity.created_at.to_s(:month_day_year)
+	%td
+		= raw(billing_activity.message)
+	%td
+		- if billing_activity.invoice.nil?
+			= number_to_currency(billing_activity.amount)
+		- else
+			= "(#{number_to_currency(billing_activity.invoice.amount)})"

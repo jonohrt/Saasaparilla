@@ -18,5 +18,10 @@ describe BillingActivity do
       @account.billing_activities.count.should == 2
     
     end
+    
+    it 'should create link to invoice in message if it has an invoice' do
+      @account.invoice!
+      @account.billing_activities.last.message.should include "<a href"
+    end
   end
 end

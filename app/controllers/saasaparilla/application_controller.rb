@@ -1,4 +1,4 @@
-class Saasaparilla::ApplitacionController < ActionController::Base
+class Saasaparilla::ApplicationController < ActionController::Base
 
 
 end

@@ -19,7 +19,10 @@ Rails.backtrace_cleaner.remove_silencers!
 
 # Configure capybara for integration testing
 require "capybara/rails"
-require 'capybara/rspec'
+require "spork"
+Spork.prefork do
+     require 'capybara/rspec'
+end
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
 
@@ -30,6 +33,9 @@ ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+include Rails.application.routes.url_helpers
+
+     
 RSpec.configure do |config|
   # Remove this line if you don't want RSpec's should and should_not
   # methods or matchers

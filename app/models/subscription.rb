@@ -16,7 +16,7 @@ class Subscription < ActiveRecord::Base
   
   Plan::BILLING_PERIODS.each do |period|
     define_method "#{period.downcase}?" do
-      plan.billing_period == period.downcase
+      plan.billing_period.downcase == period.downcase
     end
   end
   

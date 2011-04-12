@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resource :credit_card, :controller => "saasaparilla/credit_card"
     resource :contact_info, :controller => "saasaparilla/contact_info"
     resource :billing_history, :controller => "saasaparilla/billing_history" 
+    resources :invoices, :controller => "saasaparilla/invoices"
   end
   
   

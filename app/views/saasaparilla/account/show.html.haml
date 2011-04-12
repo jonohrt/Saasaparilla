@@ -34,14 +34,8 @@
 %h2 Billing History
 %table
 	
-- for activity in @account.billing_activities.recent.limit(5)
-	%tr
-		%td
-			= activity.created_at.to_s(:month_day_year)
-		%td
-			= activity.message
-		%td
-			= number_to_currency(activity.amount)
+	= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @account.billing_activities.recent.limit(5)
+
 			
 			
 %p

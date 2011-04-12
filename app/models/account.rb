@@ -81,7 +81,7 @@ class Account < ActiveRecord::Base
   def get_beginning_of_billing_cycle
     if subscription.monthly?
       return billing_date - 1.months
-    elsif subscription.yearly?
+    elsif subscription.annually?
       return billing_date - 1.years
     end
   end

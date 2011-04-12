@@ -224,6 +224,11 @@ describe Account do
         @account1.invoiced_on.should == Date.today
       end
       
+      it 'should set to and from date on invoice after invoice' do
+        @account1.invoice!
+        @account1.billing_activities.last.invoice.invoice_line_items.first.to.should == @account1.billing_date
+      end
+      
     end
   end
   

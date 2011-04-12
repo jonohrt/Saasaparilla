@@ -1,9 +1,9 @@
 class Invoice < ActiveRecord::Base
   belongs_to :billing_activity
   has_many :invoice_line_items
-  
+
   after_create :generate_billing_activity
-  
+
   attr_accessor :account
   
   
@@ -19,7 +19,7 @@ class Invoice < ActiveRecord::Base
   private
     def generate_billing_activity
 
-      self.create_billing_activity(:message => BillingActivity::MESSAGES[:success], :account => account, :amount => amount, :invoice => self)
+      self.create_billing_activity(:message => "<a href='/account/invoices/#{self.id}'>Invoice</a>", :account => account, :amount => amount, :invoice => self)
 
     end
 end

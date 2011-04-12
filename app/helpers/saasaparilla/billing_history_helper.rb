@@ -1,0 +1,4 @@
+module Saasaparilla::BillingHistoryHelper
+
+
+end

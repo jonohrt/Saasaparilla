@@ -1,0 +1,16 @@
+%h1 Invoice
+
+%p
+	Date
+	= @invoice.created_at.to_s(:month_day_year)
+
+%table
+	%tr
+		%th Price
+		%th Billing From
+		%th Billing To
+	- for line_item in @invoice.invoice_line_items
+		%tr
+			%td= line_item.price
+			%td= line_item.from.to_date.to_s(:month_day_year)
+			%td= line_item.to.to_date.to_s(:month_day_year)
