@@ -88,9 +88,12 @@ describe Account do
       @account.billing_activities.count.should == 1
     end
     
-    it 'should set invoice date after initial charge' 
+
     
-    it 'should set billing date after inital charge'
+    it 'should set billing date after inital charge' do
+      @account.save
+      @account.billing_date.should == Date.today + 1.months
+    end
     
     it 'should create a billing activity on charge' do
       @account.save
@@ -141,14 +144,14 @@ describe Account do
           plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "annually")
           contact_info = Factory.build(:contact_info)
           credit_card = Factory.build(:credit_card)
-          @account1 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today)
-          @account2 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today)
-          @account3 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card, :billing_date => Date.today + 1.days)
-          @account4 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan2), :credit_card => credit_card, :billing_date => Date.today - 1.days)
-          @account1.update_attributes(:balance => 12)
-          @account2.update_attributes(:balance => 12)
-          @account3.update_attributes(:balance => 12)
-          @account4.update_attributes(:balance => 12)
+          @account1 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card)
+          @account2 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card)
+          @account3 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan), :credit_card => credit_card)
+          @account4 = Factory(:account, :contact_info => contact_info, :subscription => Factory(:subscription, :plan => plan2), :credit_card => credit_card)
+          @account1.update_attributes(:balance => 12, :billing_date => Date.today)
+          @account2.update_attributes(:balance => 12, :billing_date => Date.today)
+          @account3.update_attributes(:balance => 12, :billing_date => Date.today + 1.days)
+          @account4.update_attributes(:balance => 12, :billing_date => Date.today - 1.days)
       end
       
       it 'should find all non canceled accounts' do
@@ -156,16 +159,26 @@ describe Account do
         Account.active.count.should == 3
       end
       it 'should find billable models' do
-        @account1.update_attributes(:balance => 12)
-        @account2.update_attributes(:balance => 12)
-        @account3.update_attributes(:balance => 12)
-        @account4.update_attributes(:balance => 12)
+        
+
         Account.active.all_billable_accounts(Date.today).count.should == 3
+      end
+      
+      it 'should find invoiceable models' do
+      
+        @account1.update_attributes(:billing_date => (Date.today + 1.days))
+        @account2.update_attributes(:billing_date => (Date.today + 6.days))
+        @account3.update_attributes(:billing_date => (Date.today + 5.days), :invoiced_on => Date.today - 1.months)
+        @account4.update_attributes(:billing_date => (Date.today + 5.days), :invoiced_on => Date.today - 2.days)
+        @accounts = Account.active.all_invoiceable(Date.today)
+        @accounts.count.should == 2
+        @accounts.should include @account1
+        @accounts.should include @account4
+        
       end
       it 'should find billable models' do
         @account1.update_attributes(:balance => 0)
-        @account2.update_attributes(:balance => 12)
-        @account3.update_attributes(:balance => 12)
+
         @account4.update_attributes(:balance => 12, :status => "canceled")
         Account.active.all_billable_accounts(Date.today).count.should == 1
       end
@@ -190,8 +203,26 @@ describe Account do
         @account4.reload.billing_date.should == @billing_date4_old + 1.years
       end
       
-      
+      it 'should set balance on invoice' do
+        @account1.balance.should == 12.0
+        @account1.invoice!
+        @account1.reload
+        @account1.balance.should == 32.0
+      end
+      it 'should create invoice on invoice' do
+        @account1.invoice!
         
+        @account1.billing_activities.last.invoice.should_not == nil
+      end
+      
+      it 'should get amount on invoice after create invoice' do
+        @account1.invoice!
+        @account1.billing_activities.last.invoice.amount.should == 20.0
+      end
+      it 'should set invoiced_on after invoice' do
+        @account1.invoice!
+        @account1.invoiced_on.should == Date.today
+      end
       
     end
   end

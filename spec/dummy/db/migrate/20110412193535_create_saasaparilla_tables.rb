@@ -8,7 +8,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.integer :customer_cim_id
       t.integer :customer_payment_profile_id
       t.date :billing_date
-      t.date :invoiced_on
+      t.date :invoicing_date
       
       t.timestamps
     end
