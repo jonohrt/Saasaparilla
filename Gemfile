@@ -27,4 +27,5 @@ group :development, :test do
   gem 'launchy'
   gem 'shoulda'
   gem 'ZenTest'
+  gem 'email_spec'
 end

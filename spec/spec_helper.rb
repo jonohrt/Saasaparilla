@@ -7,6 +7,8 @@ require "rspec/rails"
 
 require 'shoulda'
 require 'factory_girl_rails'
+require 'email_spec'
+
 Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
 
 ActionMailer::Base.delivery_method = :test
@@ -34,6 +36,9 @@ RSpec.configure do |config|
   require 'rspec/expectations'
   #config.include RSpec::Matchers
 
+  config.include(EmailSpec::Helpers)
+  config.include(EmailSpec::Matchers)
+  
   # == Mock Framework
   config.mock_with :rspec
   
