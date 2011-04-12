@@ -23,6 +23,11 @@ class Account < ActiveRecord::Base
   scope :all_billable_accounts, lambda {|date|
     where("billing_date BETWEEN ? and ? and balance > 0.0",  (date - 1.months).to_time, date.to_time)
     }
+  
+  scope :all_invoiceable, lambda {|date|
+    #find all accounts not been invoiced within the last month
+    where("billing_date <= ? and (invoiced_on > ? OR invoiced_on is null)", date + 5.days, (date - 1.months).to_time)
+    }
 
   class << self
     def find_and_bill_recurring_accounts
@@ -30,36 +35,73 @@ class Account < ActiveRecord::Base
       @billable_accounts = Account.active.all_billable_accounts(Date.today)
       for account in @billable_accounts
         account.bill!(account.balance)
-        account.set_next_billing_date
       end
 
+    end
+    
+    def find_and_invoice_accounts
+      @invoiceable_accounts = Account.active.all_invoiceable(Date.today)
+      for account in @invoiceable_accounts
+        account.invoice!
+      end
     end
   end
   
   def bill!(bill_amount = nil)
     bill_amount ||= balance
     if charge_amount(bill_amount)
+      set_next_billing_date
       set_status_ok if balance == 0.0
       return true
     end
   end
   
+  def invoice!
+    add_to_balance(subscription.plan.price)
+    create_invoice
+    self.update_attributes(:invoiced_on => Date.today)
+    #if invoice_account
+    #  set_next_invoice_date()
+  end
+  
   def cancel
     set_canceled
   end
-  def set_next_billing_date
-    
-    if subscription.monthly?
-      self.update_attributes(:billing_date => billing_date + 1.months)
-   
-    elsif subscription.annually?
-      self.update_attributes(:billing_date => billing_date + 1.years)
-    end
-  end
+  
   
   private
   
+  def create_invoice
 
+    @invoice = Invoice.create(:account => self)
+    @invoice.create_invoice_line_item(subscription.plan_price, get_beginning_of_billing_cycle, billing_date )
+   
+  end
+  
+  def get_beginning_of_billing_cycle
+    if subscription.monthly?
+      return billing_date - 1.months
+    elsif subscription.yearly?
+      return billing_date - 1.years
+    end
+  end
+  def set_next_billing_date
+    if subscription.monthly?
+      if billing_date.nil?
+        self.update_attributes(:billing_date => Date.today + 1.months)
+      else
+        
+        self.update_attributes(:billing_date => billing_date + 1.months)
+      end
+   
+    elsif subscription.annually?
+      if billing_date.nil?
+        self.update_attributes(:billing_date => Date.today + 1.years)
+      else
+        self.update_attributes(:billing_date => billing_date + 1.years)
+      end
+    end
+  end
   
   def set_status_ok
     self.update_attributes(:status => "ok") if !ok?
@@ -69,6 +111,9 @@ class Account < ActiveRecord::Base
     self.update_attributes(:status => "canceled")
   end
   
+  def add_to_balance(cost)
+    self.increment!(:balance, cost)
+  end
   
   def create_cim_profile
     #Login to the gateway using your credentials in environment.rb
