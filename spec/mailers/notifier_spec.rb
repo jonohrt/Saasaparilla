@@ -27,6 +27,32 @@ describe 'Notifier' do
     
   end
 
+  # describe 'invoice created email' do
+  # 
+  #   before(:all) do
+  #     plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
+  #     contact_info = Factory.build(:contact_info)
+  #     subscription = Factory.build(:subscription, :plan => plan)
+  #     credit_card = Factory.build(:credit_card)
+  #     @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
+  #     @account.invoice!
+  #     @email = Saasaparilla::Notifier.invoice_created(@account)
+  #   end
+  #   
+  #   it "should deliver to the account passed in" do
+  #     @email.should deliver_to(@account.contact_info.email)
+  #   end
+  #   
+  #   it "should contain the plan in the mail body" do
+  #     @email.should have_body_text(/Gold/)
+  #   end
+  # 
+  #   it "should contain the billing period in the mail body" do
+  #     @email.should have_body_text(/monthly/)
+  #   end
+  #   
+  # end
+
   describe 'account billed successfully email' do
 
     before(:all) do
