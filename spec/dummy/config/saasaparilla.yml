@@ -4,8 +4,8 @@ development:
 
 test:
   grace_period: 10    
-  host: test@dev.com
+  from_email: test@dev.com
 
 production:
   grace_period: 10    
-  host: test@dev.com
+  from_email: test@dev.com

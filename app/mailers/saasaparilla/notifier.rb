@@ -1,5 +1,5 @@
 class Saasaparilla::Notifier < ActionMailer::Base
-  default :from => "notifications@example.com"
+  default :from => Saasaparilla::CONFIG["from_email"]
 
   def subscription_created(subscription)
     @subscription = subscription
