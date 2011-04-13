@@ -1,7 +1,7 @@
 class Saasaparilla::ContactInfoController < ApplicationController
   unloadable
   
-  before_filter :get_account
+  before_filter :get_subscription
   before_filter :get_contact_info
   
   def edit
@@ -11,7 +11,7 @@ class Saasaparilla::ContactInfoController < ApplicationController
   def update
     if @contact_info.update_attributes(params[:contact_info])
       flash[:notice] = "Contact info was successfully updated."
-      redirect_to account_path
+      redirect_to subscription_path
     else
       flash[:error] = "An error has occurred when trying to update your contact info."
       render :action => "edit"
@@ -20,12 +20,12 @@ class Saasaparilla::ContactInfoController < ApplicationController
   
   private 
   
-  def get_account
-    @account = current_billable.account
+  def get_subscription
+    @subscription = current_billable.subscription
   end
   
   def get_contact_info
-    @contact_info = @account.contact_info
+    @contact_info = @subscription.contact_info
   end
   
 end

@@ -1,6 +1,6 @@
 class Transaction < ActiveRecord::Base
   
-  belongs_to :account
+  belongs_to :subscription
   serialize :params
   belongs_to :billing_activity
   after_create :generate_billing_activity
@@ -26,7 +26,7 @@ class Transaction < ActiveRecord::Base
   private
     def generate_billing_activity
       if success
-        self.create_billing_activity(:message => BillingActivity::MESSAGES[:success], :account => account, :amount => amount)
+        self.create_billing_activity(:message => BillingActivity::MESSAGES[:success], :subscription => subscription, :amount => amount)
       end
     end
 end

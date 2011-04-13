@@ -1,5 +1,5 @@
 class BillingActivity < ActiveRecord::Base
-  belongs_to :account
+  belongs_to :subscription
   has_one :invoice
   has_one :transaction
   

@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   
   
   
-  resource :account, :controller => "saasaparilla/account"
+  resource :subscription, :controller => "saasaparilla/subscription"
   
-  scope '/account', :name_prefix => 'account' do
+  scope '/subscription', :name_prefix => 'subscription' do
     resources :payments, :controller => "saasaparilla/payments" 
     resource :credit_card, :controller => "saasaparilla/credit_card"
     resource :contact_info, :controller => "saasaparilla/contact_info"

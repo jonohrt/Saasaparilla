@@ -1,11 +1,11 @@
-Factory.define :account, :class => Account do |f|
+Factory.define :subscription, :class => Subscription do |f|
   f.customer_cim_id 
   f.customer_payment_profile_id
   f.balance 10
   f.status
   f.association :credit_card
   f.association :contact_info 
-  f.association :subscription
+
 
 
 end
@@ -50,10 +50,7 @@ Factory.define :payment, :class => Payment do |f|
   f.amount 20.00
 end
 
-Factory.define :subscription, :class => Subscription do |f|
-  f.status
-  f.association :plan
-end
+
 
 Factory.define :billing_activity, :class => BillingActivity do |f|
   f.created_at Time.now
@@ -65,12 +62,12 @@ Factory.define :user, :class => User do |f|
   
 end
 
-Factory.define :account_with_all, :parent => :account do |account|
+Factory.define :subscription_with_all, :parent => :subscription do |subscription|
   
-  account.before_create do |a|
-    Factory(:contact_info, :account => a)
-    Factory(:credit_card, :account => a)
-    Factory(:subscription, :account => a, :plan => Factory(:plan, :name => "Gold"))
+  subscription.before_create do |a|
+    Factory(:contact_info, :subscription => a)
+    Factory(:credit_card, :subscription => a)
+    Factory(:subscription, :subscription => a, :plan => Factory(:plan, :name => "Gold"))
   end
   
 end

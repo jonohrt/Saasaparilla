@@ -4,6 +4,6 @@
 	Payment Amount
 	= number_to_currency(@payment.amount)
 	
-= simple_form_for [:account, @payment] do |f|
+= simple_form_for [:subscription, @payment] do |f|
 	= f.hidden_field :amount, :value => @payment.amount
 	= f.submit "Confirm"

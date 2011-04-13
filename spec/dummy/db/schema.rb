@@ -10,25 +10,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110412220334) do
-
-  create_table "accounts", :force => true do |t|
-    t.integer  "billable_id"
-    t.string   "billable_type"
-    t.float    "balance"
-    t.string   "status"
-    t.integer  "customer_cim_id"
-    t.integer  "customer_payment_profile_id"
-    t.date     "billing_date"
-    t.date     "invoiced_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(:version => 20110413174619) do
 
   create_table "billing_activities", :force => true do |t|
     t.float    "amount"
     t.string   "message"
-    t.integer  "account_id"
+    t.integer  "subscription_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -44,13 +31,13 @@ ActiveRecord::Schema.define(:version => 20110412220334) do
     t.string  "zip"
     t.string  "country"
     t.string  "phone_number"
-    t.integer "account_id"
+    t.integer "subscription_id"
   end
 
   create_table "credit_cards", :force => true do |t|
     t.string  "expiration_date"
     t.string  "card_number"
-    t.integer "account_id"
+    t.integer "subscription_id"
   end
 
   create_table "invoice_line_items", :force => true do |t|
@@ -71,7 +58,7 @@ ActiveRecord::Schema.define(:version => 20110412220334) do
 
   create_table "payments", :force => true do |t|
     t.float    "amount"
-    t.integer  "account_id"
+    t.integer  "subscription_id"
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -88,8 +75,14 @@ ActiveRecord::Schema.define(:version => 20110412220334) do
   end
 
   create_table "subscriptions", :force => true do |t|
+    t.integer  "billable_id"
+    t.string   "billable_type"
+    t.float    "balance"
     t.string   "status"
-    t.integer  "account_id"
+    t.integer  "customer_cim_id"
+    t.integer  "customer_payment_profile_id"
+    t.date     "billing_date"
+    t.date     "invoiced_on"
     t.integer  "plan_id"
     t.datetime "created_at"
     t.datetime "updated_at"

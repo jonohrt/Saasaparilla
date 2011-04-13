@@ -4,17 +4,17 @@ class Saasaparilla::CreditCardController < ApplicationController
   
   
   def edit
-    @account = current_billable.account
-    @credit_card = @account.credit_card
+    @subscription = current_billable.subscription
+    @credit_card = @subscription.credit_card
   end
   
   def update
-    @account = current_billable.account
-    @credit_card = @account.credit_card
+    @subscription = current_billable.subscription
+    @credit_card = @subscription.credit_card
     begin 
-      if @account.credit_card.update_attributes(params[:credit_card])
+      if @subscription.credit_card.update_attributes(params[:credit_card])
         flash[:notice] = "Your credit card was successfully updated."
-        redirect_to account_path
+        redirect_to subscription_path
       else
         # @credit_card = @credit_card.reload_with_errors
         render :action => "edit"

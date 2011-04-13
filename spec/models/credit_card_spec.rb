@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CreditCard do
   
-  it { should belong_to :account }
+  it { should belong_to :subscription }
   
   
   it 'should produce credit card from valid attributes' do
@@ -35,9 +35,9 @@ describe CreditCard do
     before(:each) do
       @plan = Factory.build(:plan, :name => "Gold", :price => 20)
       @contact_info = Factory.build(:contact_info)
-      @subscription = Factory.build(:subscription, :plan => @plan)
+
       @credit_card = Factory.build(:credit_card)
-      @account = Factory(:account, :contact_info => @contact_info, :subscription => @subscription, :credit_card => @credit_card)
+      @subscription = Factory(:subscription, :contact_info => @contact_info, :plan => @plan, :credit_card => @credit_card)
     end
   
   

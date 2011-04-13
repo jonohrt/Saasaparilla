@@ -7,16 +7,16 @@ describe 'CreditCard' do
       
        @plan = Factory.build(:plan, :name => "Gold", :price => 20)
        @contact_info = Factory.build(:contact_info)
-       @subscription = Factory.build(:subscription, :plan => @plan)
+     
        @credit_card = Factory.build(:credit_card)
-       @account = Factory(:account, :contact_info => @contact_info, :subscription => @subscription, :credit_card => @credit_card)
-       @user = Factory(:user, :account => @account)
+       @subscription = Factory(:subscription, :contact_info => @contact_info, :plan => @plan, :credit_card => @credit_card)
+       @user = Factory(:user, :subscription => @subscription)
     end
     
     it 'should load credit_card path' do
-      visit edit_account_credit_card_path
-      page.should have_content(@account.credit_card.card_number)
-      page.should have_content(@account.credit_card.expiration_date)
+      visit edit_subscription_credit_card_path
+      page.should have_content(@subscription.credit_card.card_number)
+      page.should have_content(@subscription.credit_card.expiration_date)
     end
     
   end
@@ -25,13 +25,13 @@ describe 'CreditCard' do
     before(:each) do
       @plan = Factory.build(:plan, :name => "Gold", :price => 20)
       @contact_info = Factory.build(:contact_info)
-      @subscription = Factory.build(:subscription, :plan => @plan)
+
       @credit_card = Factory.build(:credit_card)
-      @account = Factory(:account, :contact_info => @contact_info, :subscription => @subscription, :credit_card => @credit_card)
-       @user = Factory(:user, :account => @account)
+      @subscription = Factory(:subscription, :contact_info => @contact_info, :plan => @plan, :credit_card => @credit_card)
+       @user = Factory(:user, :subscription => @subscription)
     end
     it 'should update credit card' do
-    visit edit_account_credit_card_path
+    visit edit_subscription_credit_card_path
       fill_in "First name", :with => "Bob"
       fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"
@@ -47,7 +47,7 @@ describe 'CreditCard' do
     
     it 'should update credit card' do
       GATEWAYCIM.success= false
-      visit edit_account_credit_card_path
+      visit edit_subscription_credit_card_path
       fill_in "First name", :with => "Bob"
       fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"

@@ -1,16 +1,16 @@
 class Saasaparilla::PaymentsController < ApplicationController
   unloadable
-  before_filter :get_account
+  before_filter :get_subscription
   before_filter :get_payment, :only => [:edit, :update]
   before_filter :check_pending, :only => [:edit, :update]
   def new
-    @payment = @account.payments.build
+    @payment = @subscription.payments.build
   end
   
   def create
-    @payment = @account.payments.build(params[:payment])
+    @payment = @subscription.payments.build(params[:payment])
      if @payment.save
-       redirect_to edit_account_payment_path(@payment)
+       redirect_to edit_subscription_payment_path(@payment)
      else
        render :action => "new"
      end
@@ -25,7 +25,7 @@ class Saasaparilla::PaymentsController < ApplicationController
     begin
       if @payment.update_attributes(params[:payment])
         flash[:notice] = "Thank you, your payment has been processed."
-        redirect_to account_payment_path
+        redirect_to subscription_payment_path
       else
         flash[:error] = "An error has occured when trying to process your payment."
         render :action => "edit"
@@ -38,27 +38,27 @@ class Saasaparilla::PaymentsController < ApplicationController
   end
   
   def show
-    @payment = @account.payments.find(params[:id])
+    @payment = @subscription.payments.find(params[:id])
   end
   
   
   
   private
   
-  def get_account
-    @account = current_billable.account
+  def get_subscription
+    @subscription = current_billable.subscription
   end
   
   def get_payment
 
-    @payment = @account.payments.find(params[:id])
+    @payment = @subscription.payments.find(params[:id])
 
   end
   
   def check_pending
     unless @payment.pending?
       flash[:error] = "Payment has already been paid."
-      redirect_to new_account_payment_path
+      redirect_to new_subscription_payment_path
     end
     
   end

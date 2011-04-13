@@ -17,7 +17,7 @@ class CreditCard < ActiveRecord::Base
   MONTHS = (1..12).to_a
   YEARS = ((Date.today.year)..(Date.today.year + 8)).to_a
   
-  belongs_to :account
+  belongs_to :subscription
   
   before_save :mask_card_number
   before_save :create_expiration_date
@@ -82,9 +82,9 @@ class CreditCard < ActiveRecord::Base
   
   def update_payment_profile
     unless new_record?
-      @profile = {:customer_profile_id => account.customer_cim_id,
-                    :payment_profile => {:customer_payment_profile_id => account.customer_payment_profile_id, 
-                                         :bill_to => account.contact_info.to_hash, 
+      @profile = {:customer_profile_id => subscription.customer_cim_id,
+                    :payment_profile => {:customer_payment_profile_id => subscription.customer_payment_profile_id, 
+                                         :bill_to => subscription.contact_info.to_hash, 
                                          :payment =>  {:credit_card => active_merchant_card}
                     }
                 }

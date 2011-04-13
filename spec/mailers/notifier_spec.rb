@@ -7,14 +7,13 @@ describe 'Notifier' do
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-      subscription = Factory.build(:subscription, :plan => plan)
       credit_card = Factory.build(:credit_card)
-      @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.subscription_created(@account)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @email = Saasaparilla::Notifier.subscription_created(@subscription)
     end
     
-    it "should deliver to the account passed in" do
-      @email.should deliver_to(@account.contact_info.email)
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
     end
     
     it "should contain the plan in the mail body" do
@@ -34,13 +33,13 @@ describe 'Notifier' do
   #     contact_info = Factory.build(:contact_info)
   #     subscription = Factory.build(:subscription, :plan => plan)
   #     credit_card = Factory.build(:credit_card)
-  #     @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-  #     @account.invoice!
-  #     @email = Saasaparilla::Notifier.invoice_created(@account)
+  #     @subscription = Factory.build(:subscription, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
+  #     @subscription.invoice!
+  #     @email = Saasaparilla::Notifier.invoice_created(@subscription)
   #   end
   #   
-  #   it "should deliver to the account passed in" do
-  #     @email.should deliver_to(@account.contact_info.email)
+  #   it "should deliver to the subscription passed in" do
+  #     @email.should deliver_to(@subscription.contact_info.email)
   #   end
   #   
   #   it "should contain the plan in the mail body" do
@@ -53,20 +52,20 @@ describe 'Notifier' do
   #   
   # end
 
-  describe 'account billed successfully email' do
+  describe 'subscription billed successfully email' do
 
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-      subscription = Factory.build(:subscription, :plan => plan)
+  
       credit_card = Factory.build(:credit_card)
-      @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.account_billing_successful(@account, 20)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @email = Saasaparilla::Notifier.subscription_billing_successful(@subscription, 20)
       
     end
     
-    it "should deliver to the account passed in" do
-      @email.should deliver_to(@account.contact_info.email)
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
     end
     
     it "should contain the plan in the mail body" do
@@ -83,19 +82,19 @@ describe 'Notifier' do
 
   end  
   
-  describe 'account billing failed email' do
+  describe 'subscription billing failed email' do
 
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-      subscription = Factory.build(:subscription, :plan => plan)
+
       credit_card = Factory.build(:credit_card)
-      @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.account_billing_failed(@account)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @email = Saasaparilla::Notifier.subscription_billing_failed(@subscription)
     end
     
-    it "should deliver to the account passed in" do
-      @email.should deliver_to(@account.contact_info.email)
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
     end
     
     it "should contain the plan in the mail body" do
@@ -106,8 +105,8 @@ describe 'Notifier' do
       @email.should have_body_text(/monthly/)
     end
 
-    it "should contain the #edit_account_credit_card_url in the mail body" do
-      @email.should have_body_text(/#{edit_account_credit_card_url(:host => "test.com")}/)
+    it "should contain the #edit_subscription_credit_card_url in the mail body" do
+      @email.should have_body_text(/#{edit_subscription_credit_card_url(:host => "test.com")}/)
     end
     
   end
@@ -118,14 +117,14 @@ describe 'Notifier' do
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-      subscription = Factory.build(:subscription, :plan => plan)
+
       credit_card = Factory.build(:credit_card)
-      @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.pending_cancellation_notice(@account)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @email = Saasaparilla::Notifier.pending_cancellation_notice(@subscription)
     end
     
-    it "should deliver to the account passed in" do
-      @email.should deliver_to(@account.contact_info.email)
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
     end
     
     it "should contain the plan in the mail body" do
@@ -136,30 +135,30 @@ describe 'Notifier' do
       @email.should have_body_text(/monthly/)
     end
 
-    it "should contain the #edit_account_credit_card_url in the mail body" do
-      @email.should have_body_text(/#{edit_account_credit_card_url(:host => "test.com")}/)
+    it "should contain the #edit_subscription_credit_card_url in the mail body" do
+      @email.should have_body_text(/#{edit_subscription_credit_card_url(:host => "test.com")}/)
     end
     
   end
   
   
-  describe 'account cancelled email' do
+  describe 'subscription cancelled email' do
 
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-      subscription = Factory.build(:subscription, :plan => plan)
+   
       credit_card = Factory.build(:credit_card)
-      @account = Factory.build(:account, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.account_cancelled(@account)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @email = Saasaparilla::Notifier.subscription_cancelled(@subscription)
     end
     
-    it "should deliver to the account passed in" do
-      @email.should deliver_to(@account.contact_info.email)
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
     end
     
     it "should contain the plan in the mail body" do
-      @email.should have_body_text(/You account has been cancelled/)
+      @email.should have_body_text(/Your subscription has been cancelled/)
     end
     
   end

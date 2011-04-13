@@ -1,6 +1,6 @@
 class ContactInfo < ActiveRecord::Base
   
-  belongs_to :account, :dependent => :destroy
+  belongs_to :subscription, :dependent => :destroy
   validates_presence_of :first_name
   validates_presence_of :last_name
   validates_presence_of :email

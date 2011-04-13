@@ -1,6 +1,6 @@
 class CreateSaasaparillaTables < ActiveRecord::Migration
   def self.up
-    create_table :accounts do |t|
+    create_table :subscriptions do |t|
       t.integer :billable_id
       t.string :billable_type
       t.float :balance
@@ -9,22 +9,16 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.integer :customer_payment_profile_id
       t.date :billing_date
       t.date :invoiced_on
-      
+      t.integer :plan_id
       t.timestamps
     end
     
     create_table :credit_cards do |t|
       t.string :expiration_date
       t.string :card_number
-      t.integer :account_id
+      t.integer :subscription_id
     end
-    create_table :subscriptions do |t|
-      t.string :status
-      t.integer :account_id
-      t.integer :plan_id
-      t.timestamps
-    end
-    
+  
     
     create_table :plans do |t|
       t.string :name
@@ -47,18 +41,18 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.string :country
       t.string :phone_number
     
-      t.integer :account_id
+      t.integer :subscription_id
     end
     
     create_table :billing_activities do |t|
       t.float :amount
       t.string :message
-      t.integer :account_id
+      t.integer :subscription_id
       t.timestamps
     end
     create_table :payments do |t|
       t.float :amount
-      t.integer :account_id
+      t.integer :subscription_id
       t.string :status
       t.timestamps
       
@@ -93,7 +87,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :accounts
+
     drop_table :subscriptions
     drop_table :credit_cards
     drop_table :transactions

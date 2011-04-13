@@ -1,0 +1,5 @@
+%h2 Your account was successfully billed
+
+%p
+   = "Your credit card has been charged $#{@amount} for your #{@subscription.plan.billing_period} subscription to the #{@subscription.plan.name} plan. Thank you."
+   If you need any assistance, please contact the administrator.

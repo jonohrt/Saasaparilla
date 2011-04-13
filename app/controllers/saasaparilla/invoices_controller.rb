@@ -10,9 +10,9 @@ class Saasaparilla::InvoicesController < ApplicationController
   def get_invoice
     @invoice = Invoice.find(params[:id])
     
-    unless @invoice.billing_activity.account == current_billable.account
+    unless @invoice.billing_activity.subscription == current_billable.subscription
       flash[:error] = "Unauthorized to access this invoice"
-      redirect_to account_path
+      redirect_to subscription_path
     end
   end
 end

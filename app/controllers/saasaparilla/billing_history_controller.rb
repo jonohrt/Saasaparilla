@@ -4,7 +4,7 @@ class Saasaparilla::BillingHistoryController < ApplicationController
   layout 'saasaparilla'
   
   def show
-    @billing_activities = current_billable.account.billing_activities.order('created_at asc')
+    @billing_activities = current_billable.subscription.billing_activities.order('created_at asc')
     
   end
 end

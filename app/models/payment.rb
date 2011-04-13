@@ -1,11 +1,11 @@
 class Payment < ActiveRecord::Base
   before_validation :set_status_pending, :on => :create
-  before_update :charge_account
+  before_update :charge_subscription
   validate :valid_amount
-  validates_presence_of :account_id
+  validates_presence_of :subscription_id
   validates_presence_of :amount, :message => "can't be blank"
   has_statuses "pending", "paid", "failed"
-  belongs_to :account
+  belongs_to :subscription
   
   
   
@@ -14,7 +14,7 @@ class Payment < ActiveRecord::Base
     if amount < 0
       errors[:amount] = "cannot be less than 0"
     end
-    if amount > account.balance
+    if amount > subscription.balance
       errors[:amount] = "cannot be more than your balance"
     end
     if amount == 0
@@ -25,9 +25,9 @@ class Payment < ActiveRecord::Base
   
   private
   
-  def charge_account
+  def charge_subscription
 
-    if account.bill!(amount)
+    if subscription.bill!(amount)
       self.status = "paid"
     end
     
