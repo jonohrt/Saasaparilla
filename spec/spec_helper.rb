@@ -33,7 +33,7 @@ ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-include Rails.application.routes.url_helpers
+
 
      
 RSpec.configure do |config|
@@ -41,10 +41,9 @@ RSpec.configure do |config|
   # methods or matchers
   require 'rspec/expectations'
   #config.include RSpec::Matchers
-
+  require 'action_mailer'
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
-  
   # == Mock Framework
   config.mock_with :rspec
   
@@ -62,5 +61,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+include Rails.application.routes.url_helpers
 
 

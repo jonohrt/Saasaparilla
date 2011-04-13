@@ -72,10 +72,9 @@ class Account < ActiveRecord::Base
   private
   
   def create_invoice
-
-    @invoice = Invoice.create(:account => self)
-    @invoice.create_invoice_line_item(subscription.plan_price, get_beginning_of_billing_cycle, billing_date )
-   
+    @invoice = Invoice.create(:account => self, :price => subscription.plan_price, :from => get_beginning_of_billing_cycle, :to => billing_date)
+    # @invoice.create_invoice_line_item(subscription.plan_price, get_beginning_of_billing_cycle, billing_date )
+ 
   end
   
   def get_beginning_of_billing_cycle

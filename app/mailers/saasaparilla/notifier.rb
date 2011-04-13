@@ -1,10 +1,15 @@
 class Saasaparilla::Notifier < ActionMailer::Base
-  
   default :from => "notifications@example.com"
- 
+
   def subscription_created(account)
     @account = account
     mail(:to => account.contact_info.email, :subject => "Subscription Created")
+  end
+
+  def invoice_created(account, invoice)
+    @account = account
+    @invoice = invoice
+    mail(:to => account.contact_info.email, :subject => "Invoice Created")
   end
 
   def account_billing_successful(account, amount)
