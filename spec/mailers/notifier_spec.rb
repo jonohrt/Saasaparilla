@@ -26,31 +26,31 @@ describe 'Notifier' do
     
   end
 
-  # describe 'invoice created email' do
-  # 
-  #   before(:all) do
-  #     plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
-  #     contact_info = Factory.build(:contact_info)
-  #     subscription = Factory.build(:subscription, :plan => plan)
-  #     credit_card = Factory.build(:credit_card)
-  #     @subscription = Factory.build(:subscription, :contact_info => contact_info, :subscription => subscription, :credit_card => credit_card)
-  #     @subscription.invoice!
-  #     @email = Saasaparilla::Notifier.invoice_created(@subscription)
-  #   end
-  #   
-  #   it "should deliver to the subscription passed in" do
-  #     @email.should deliver_to(@subscription.contact_info.email)
-  #   end
-  #   
-  #   it "should contain the plan in the mail body" do
-  #     @email.should have_body_text(/Gold/)
-  #   end
-  # 
-  #   it "should contain the billing period in the mail body" do
-  #     @email.should have_body_text(/monthly/)
-  #   end
-  #   
-  # end
+  describe 'invoice created email' do
+  
+    before(:all) do
+      plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
+      contact_info = Factory.build(:contact_info)
+      credit_card = Factory.build(:credit_card)
+      @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
+      @subscription.invoice!
+      @invoice = BillingActivity.recent.first.invoice
+      @email = Saasaparilla::Notifier.invoice_created(@subscription, @invoice)
+    end
+    
+    it "should deliver to the subscription passed in" do
+      @email.should deliver_to(@subscription.contact_info.email)
+    end
+    
+    it "should contain the plan in the mail body" do
+      @email.should have_body_text(/Gold/)
+    end
+  
+    it "should contain the line item amount the mail body" do
+      @email.should have_body_text(/20/)
+    end
+    
+  end
 
   describe 'subscription billed successfully email' do
 

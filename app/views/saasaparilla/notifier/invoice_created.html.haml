@@ -1,0 +1,24 @@
+%h2 Invoice
+
+%p
+   = "You will be billed in 5 days for the following:"
+
+%table
+   - @invoice.invoice_line_items.each do |item|
+      %tr
+         %td
+            = @subscription.plan.name
+         %td
+            = "#{item.from.to_s}-#{item.to.to_s}"
+         %td
+            = "$" + item.price.to_s
+   %tr
+      %td
+         Total:
+      %td 
+         &nbsp;
+      %td
+         = "$" + @invoice.amount.to_s
+   
+%p
+   No action is required at this time. If you need any assistance, please contact the administrator.
