@@ -41,6 +41,11 @@ describe Subscription do
     #   @subscription.save
     # end
   
+    it 'should send subscription_created email' do
+      Saasaparilla::Notifier.should_receive(:subscription_created).with(@subscription)
+      @subscription.save
+    end
+  
     it 'should have status active' do
        @subscription.save
        @subscription.active?.should == true
@@ -88,8 +93,6 @@ describe Subscription do
       @subscription.billing_activities.count.should == 1
     end
     
-
-    
     it 'should set billing date after inital charge' do
       @subscription.save
       @subscription.billing_date.should == Date.today + 1.months
@@ -134,6 +137,7 @@ describe Subscription do
    
     end
     
+
     
     
   end

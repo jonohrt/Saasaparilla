@@ -18,6 +18,7 @@ class Subscription < ActiveRecord::Base
   before_create :set_initial_balance
   after_rollback :delete_profile
   after_create :bill!
+  after_create :send_subscription_created_email
   
   
   validates_presence_of :plan, :message => "can't be blank"
@@ -220,6 +221,10 @@ class Subscription < ActiveRecord::Base
     if new_record?
       response = GATEWAYCIM::delete_customer_profile(:customer_profile_id => self.customer_cim_id) if customer_cim_id
     end
+  end
+  
+  def send_subscription_created_email
+    Saasaparilla::Notifier.subscription_created(self)
   end
   
 end
