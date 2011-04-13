@@ -193,6 +193,38 @@ describe Subscription do
         
         
       end
+      it 'should change status of subscription to overdue if failed billing' do
+        GATEWAYCIM.success = false
+        Subscription.find_and_bill_recurring_subscriptions
+        GATEWAYCIM.success = true
+        @subscription1.reload.overdue?.should == true
+        
+      end
+      it 'should change status of subscription to canceled if failed over grace period' do
+        @subscription1.update_attributes(:billing_date => Date.today - 11.days, :status => "overdue")
+        GATEWAYCIM.success = false
+        Subscription.find_and_bill_recurring_subscriptions
+        GATEWAYCIM.success = true
+        @subscription1.reload.canceled?.should == true
+
+      end
+      
+      it 'should not change status if subscription not past grace period on failed billing' do
+        @subscription2.update_attributes(:billing_date => Date.today - 9.days, :status => "overdue", :overdue_on => Date.today - 9.days)
+        GATEWAYCIM.success = false
+        Subscription.find_and_bill_recurring_subscriptions
+        GATEWAYCIM.success = true
+        @subscription2.reload.overdue?.should == true
+      end
+      
+      it 'should set overdue_on to todays date when payment failed' do
+        @subscription1.update_attributes(:billing_date => Date.today , :status => "active")
+        GATEWAYCIM.success = false
+        Subscription.find_and_bill_recurring_subscriptions
+        GATEWAYCIM.success = true
+        @subscription1.reload.overdue?.should == true
+        @subscription1.overdue_on.should == Date.today
+      end
       it 'should set billing date to next month' do
         @billing_date1_old = @subscription1.billing_date
         @billing_date2_old = @subscription2.billing_date

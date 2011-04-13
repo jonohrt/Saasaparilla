@@ -43,7 +43,12 @@ class Subscription < ActiveRecord::Base
       #find_all_subscriptions need billing
       @billable_subscriptions = Subscription.active.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
-        subscription.bill!(subscription.balance)
+        
+        begin
+          subscription.bill!(subscription.balance)
+        rescue
+          subscription.billing_failed
+        end
       end
 
     end
@@ -63,6 +68,7 @@ class Subscription < ActiveRecord::Base
       set_status_active if balance == 0.0
       return true
     end
+
   end
   
   def invoice!
@@ -77,6 +83,15 @@ class Subscription < ActiveRecord::Base
     set_canceled
   end
   
+  def billing_failed
+    
+      
+    set_status_overdue
+    
+    if billing_date < Date.today - Saasaparilla::CONFIG["grace_period"].days
+      cancel
+    end
+  end
   
   private
   
@@ -120,6 +135,14 @@ class Subscription < ActiveRecord::Base
     self.update_attributes(:status => "canceled")
   end
   
+  def set_status_overdue
+    unless overdue?
+      self.overdue_on = Date.today
+    end
+    self.status = "overdue"
+    self.save
+
+  end
   def add_to_balance(cost)
     self.increment!(:balance, cost)
   end
