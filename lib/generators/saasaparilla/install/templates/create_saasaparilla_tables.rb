@@ -9,6 +9,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.integer :customer_payment_profile_id
       t.date :billing_date
       t.date :invoiced_on
+      t.date :overdue_on
       t.integer :plan_id
       t.timestamps
     end

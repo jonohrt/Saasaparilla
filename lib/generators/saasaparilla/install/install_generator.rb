@@ -15,9 +15,15 @@ module Saasaparilla
       end
 
       def copy_migrations
+        
         migration_template "create_saasaparilla_tables.rb", "db/migrate/create_saasaparilla_tables.rb"
       
       end
+      
+      def copy_config
+        copy_file 'saasaparilla.yml', 'config/saasaparilla.yml'
+      end
+  
     end
   end
 end
