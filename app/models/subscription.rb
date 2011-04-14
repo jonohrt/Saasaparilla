@@ -15,6 +15,7 @@ class Subscription < ActiveRecord::Base
   before_create :create_cim_profile
   before_create :create_payment_profile
   before_validation :set_status, :on => :create
+  before_validation :set_credit_card_name
   before_create :set_initial_balance
   after_rollback :delete_profile
   after_create :initial_bill
@@ -239,6 +240,11 @@ class Subscription < ActiveRecord::Base
     if new_record?
       response = GATEWAYCIM::delete_customer_profile(:customer_profile_id => self.customer_cim_id) if customer_cim_id
     end
+  end
+  
+  def set_credit_card_name
+    self.credit_card.first_name = contact_info.first_name    
+    self.credit_card.last_name = contact_info.last_name    
   end
   
   def send_subscription_created_email

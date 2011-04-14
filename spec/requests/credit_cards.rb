@@ -31,9 +31,9 @@ describe 'CreditCard' do
        @user = Factory(:user, :subscription => @subscription)
     end
     it 'should update credit card' do
-    visit edit_subscription_credit_card_path
-      fill_in "First name", :with => "Bob"
-      fill_in "Last name", :with => "Herman"
+      visit edit_subscription_credit_card_path
+      # fill_in "First name", :with => "Bob"
+      # fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"
       select 'Visa', :from => "Card type"
       fill_in "Card verification", :with => "332"
@@ -48,8 +48,8 @@ describe 'CreditCard' do
     it 'should update credit card' do
       GATEWAYCIM.success= false
       visit edit_subscription_credit_card_path
-      fill_in "First name", :with => "Bob"
-      fill_in "Last name", :with => "Herman"
+      # fill_in "First name", :with => "Bob"
+      # fill_in "Last name", :with => "Herman"
       fill_in "Card number", :with => "4111111111111111"
       select 'Visa', :from => "Card type"
       fill_in "Card verification", :with => "332"

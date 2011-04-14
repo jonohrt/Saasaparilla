@@ -18,8 +18,8 @@ describe 'Subscriptions' do
       fill_in "State", :with => "wa"
       fill_in "Zip", :with => "98123"
       select 'United States', :from => 'Country'
-      fill_in "subscription_credit_card_attributes_first_name", :with => "Bob"
-      fill_in "subscription_credit_card_attributes_last_name", :with => "Herman"
+      # fill_in "subscription_credit_card_attributes_first_name", :with => "Bob"
+      # fill_in "subscription_credit_card_attributes_last_name", :with => "Herman"
       fill_in "Phone number", :with => "206-123-1234"
       fill_in "Card number", :with => "4111111111111111"
       select 'Visa', :from => "Card type"
@@ -42,8 +42,8 @@ describe 'Subscriptions' do
       fill_in "State", :with => "wa"
       fill_in "Zip", :with => "98123"
       select 'United States', :from => 'Country'
-      fill_in "subscription_credit_card_attributes_first_name", :with => "Bob"
-      fill_in "subscription_credit_card_attributes_last_name", :with => "Herman"
+      # fill_in "subscription_credit_card_attributes_first_name", :with => "Bob"
+      # fill_in "subscription_credit_card_attributes_last_name", :with => "Herman"
       fill_in "Phone number", :with => "206-123-1234"
       fill_in "Card number", :with => "4222222222222"
       select 'Visa', :from => "Card type"

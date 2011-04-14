@@ -26,6 +26,12 @@ describe Subscription do
         @subscription.customer_cim_id.should_not be_nil
     end
     
+    it 'should have contact_info' do
+      @subscription.save
+      @subscription.reload
+      @subscription.contact_info.should_not be_nil
+    end
+    
     it 'should create payment profile after create' do
        @subscription.save
        @subscription.customer_payment_profile_id.should_not == nil
