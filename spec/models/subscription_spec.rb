@@ -249,18 +249,12 @@ describe Subscription do
 
       it 'should send billing_failed email if failed billing' do
         GATEWAYCIM.success = false
-<<<<<<< HEAD
         ActionMailer::Base.deliveries = [];
         @subscription2.update_attributes(:status => 'canceled')
         @subscription3.update_attributes(:status => 'canceled')
         @subscription4.update_attributes(:status => 'canceled')
         Subscription.find_and_bill_recurring_subscriptions
         ActionMailer::Base.deliveries.first.subject.should =~ /Account Billing Failed/
-=======
-        Saasaparilla::Notifier.should_receive(:billing_failed).with(@subscription1)
-        Subscription.find_and_bill_recurring_subscriptions
-        
->>>>>>> 4f077db41030028018ee691ccfa2f281c1262795
         GATEWAYCIM.success = true
       end
 

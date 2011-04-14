@@ -1,8 +1,7 @@
 if Rails.env == "production"
   ::GATEWAYCIM = ActiveMerchant::Billing::AuthorizeNetCimGateway.new(
      :login => Saasaparilla::CONFIG["auth_dot_net_login"],
-     :password => Saasaparilla::CONFIG["auth_dot_net_password"],
-     
+     :password => Saasaparilla::CONFIG["auth_dot_net_password"]     
      )
 elsif Rails.env == "test"
   ActiveMerchant::Billing::Base.mode = :test
