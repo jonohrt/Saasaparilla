@@ -196,7 +196,40 @@ describe Subscription do
       end
 
     describe 'recurring billing' do
-    
+      describe 'trial period' do
+        before(:each) do
+          Saasaparilla::CONFIG["trial_period"] = 3
+           plan = Factory(:plan, :name => "Gold", :price => 20.0)
+           contact_info = Factory.build(:contact_info)
+           credit_card = Factory.build(:credit_card)
+           @subscription = Factory(:subscription, :contact_info => contact_info,  :plan => plan, :credit_card => credit_card)
+        end
+        after(:each) do 
+           Saasaparilla::CONFIG["trial_period"] = 0
+        end
+       it "should not bill on create if grace period " do
+        
+         @subscription.billing_activities.count.should == 0
+         
+       end
+       it "shouldn't charge subscrition until after trial period" do
+
+          Date.should_receive(:today).any_number_of_times.and_return(Time.now.to_date + 2.months)
+          Subscription.find_and_bill_recurring_subscriptions
+          @subscription.billing_activities.count.should == 0
+
+
+         
+        end
+
+        it "should charge subscription after trial period" do
+          Date.should_receive(:today).any_number_of_times.and_return(Time.now.to_date + 3.months )
+          Subscription.find_and_bill_recurring_subscriptions
+          @subscription.billing_activities.count.should == 1
+         
+        end
+        
+      end 
       it 'should reset charge subscription' do
         Subscription.find_and_bill_recurring_subscriptions
         @subscription1.billing_activities.count.should == 2
@@ -211,15 +244,23 @@ describe Subscription do
         GATEWAYCIM.success = true
         @subscription1.reload.overdue?.should == true
       end
+      
+     
 
       it 'should send billing_failed email if failed billing' do
         GATEWAYCIM.success = false
+<<<<<<< HEAD
         ActionMailer::Base.deliveries = [];
         @subscription2.update_attributes(:status => 'canceled')
         @subscription3.update_attributes(:status => 'canceled')
         @subscription4.update_attributes(:status => 'canceled')
         Subscription.find_and_bill_recurring_subscriptions
         ActionMailer::Base.deliveries.first.subject.should =~ /Account Billing Failed/
+=======
+        Saasaparilla::Notifier.should_receive(:billing_failed).with(@subscription1)
+        Subscription.find_and_bill_recurring_subscriptions
+        
+>>>>>>> 4f077db41030028018ee691ccfa2f281c1262795
         GATEWAYCIM.success = true
       end
 

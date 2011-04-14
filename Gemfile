@@ -17,7 +17,10 @@ gem 'active_merchant'
 gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'
+gem 'i18n'
 group :development, :test do
+	gem "autotest-growl"
+	gem "autotest-fsevent"
   gem "autotest-rails"
   gem "factory_girl_rails", ">= 1.0.1"
   gem "rspec-rails"

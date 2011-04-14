@@ -17,7 +17,7 @@ class Subscription < ActiveRecord::Base
   before_validation :set_status, :on => :create
   before_create :set_initial_balance
   after_rollback :delete_profile
-  after_create :bill!
+  after_create :initial_bill
   after_create :send_subscription_created_email
   
   
@@ -26,7 +26,7 @@ class Subscription < ActiveRecord::Base
   scope :active, where("status != ?", "canceled")
   
   scope :all_billable_subscriptions, lambda {|date|
-    where("billing_date BETWEEN ? and ? and balance > 0.0",  (date - 1.months).to_time, date.to_time)
+    where("billing_date < ? and balance > 0.0", date.to_time)
     }
   
   scope :all_invoiceable, lambda {|date|
@@ -45,6 +45,7 @@ class Subscription < ActiveRecord::Base
       @billable_subscriptions = Subscription.active.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
         begin
+  
           subscription.bill!(subscription.balance)
         rescue
           subscription.billing_failed
@@ -61,6 +62,15 @@ class Subscription < ActiveRecord::Base
     end
   end
   
+  
+  def initial_bill
+    if Saasaparilla::CONFIG["trial_period"] > 0
+      set_next_billing_date(Saasaparilla::CONFIG["trial_period"])
+    else
+      bill!
+    end
+    
+  end
   def bill!(bill_amount = nil)
     bill_amount ||= balance
     if charge_amount(bill_amount)
@@ -117,10 +127,11 @@ class Subscription < ActiveRecord::Base
     end
   end
   
-  def set_next_billing_date
+  def set_next_billing_date(grace_period = 0)
+    grace_period = grace_period - 1 if grace_period > 0
     if monthly?
       if billing_date.nil?
-        self.update_attributes(:billing_date => Date.today + 1.months)
+        self.update_attributes(:billing_date => Date.today + 1.months + grace_period.months)
       else
         
         self.update_attributes(:billing_date => billing_date + 1.months)
@@ -128,7 +139,7 @@ class Subscription < ActiveRecord::Base
    
     elsif annually?
       if billing_date.nil?
-        self.update_attributes(:billing_date => Date.today + 1.years)
+        self.update_attributes(:billing_date => Date.today + 1.years + grace_period.months)
       else
         self.update_attributes(:billing_date => billing_date + 1.years)
       end
