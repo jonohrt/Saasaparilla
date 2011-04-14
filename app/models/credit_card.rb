@@ -1,5 +1,6 @@
 class CreditCard < ActiveRecord::Base
   
+  before_validation :set_first_last_name, :on => :update  
   validate :validate_card
   validates_presence_of :card_verification
   validates_presence_of :first_name
@@ -23,6 +24,7 @@ class CreditCard < ActiveRecord::Base
   before_save :create_expiration_date
   before_save :update_payment_profile
   
+
   def validate_card
     unless active_merchant_card.valid?
         active_merchant_card.errors.full_messages.each do |message|
@@ -99,5 +101,9 @@ class CreditCard < ActiveRecord::Base
       end
     end
 
+  def set_first_last_name
+    self.first_name = subscription.contact_info.first_name
+    self.last_name = subscription.contact_info.last_name
+  end
 
 end

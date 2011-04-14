@@ -7,10 +7,7 @@ describe CreditCard do
   
   it 'should produce credit card from valid attributes' do
       credit_card = Factory(:credit_card)
-      
       credit_card.active_merchant_card.class.should == ActiveMerchant::Billing::CreditCard
-
-
    end
    
   describe 'Card create' do
@@ -43,8 +40,9 @@ describe CreditCard do
   
     it 'should update card on auth.net' do
       @credit_card.should_receive(:update_payment_profile)
-      @credit_card.update_attributes(:first_name =>"new",
-            :last_name  => "value",
+      @credit_card.update_attributes(
+            # :first_name =>"new",
+            # :last_name  => "value",
             :card_type => "Visa",
             :card_number => "4111111111111111",
             :card_verification => "545",
