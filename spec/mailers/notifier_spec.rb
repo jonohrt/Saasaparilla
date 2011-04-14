@@ -60,7 +60,7 @@ describe 'Notifier' do
   
       credit_card = Factory.build(:credit_card)
       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.subscription_billing_successful(@subscription, 20)
+      @email = Saasaparilla::Notifier.billing_successful(@subscription, 20)
       
     end
     
@@ -90,7 +90,7 @@ describe 'Notifier' do
 
       credit_card = Factory.build(:credit_card)
       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.subscription_billing_failed(@subscription)
+      @email = Saasaparilla::Notifier.billing_failed(@subscription)
     end
     
     it "should deliver to the subscription passed in" do

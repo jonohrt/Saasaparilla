@@ -4,7 +4,7 @@ class Invoice < ActiveRecord::Base
 
   after_create :create_invoice_line_item
   after_create :generate_billing_activity
-  after_create :send_email
+  after_create :send_invoice_created_email
   attr_accessor :subscription, :price, :from, :to
 
   
@@ -24,8 +24,8 @@ class Invoice < ActiveRecord::Base
       self.create_billing_activity(:message => "<a href='/subscription/invoices/#{self.id}'>Invoice</a>", :subscription => subscription, :amount => amount, :invoice => self)
     end
     
-    def send_email
-      
+    def send_invoice_created_email
+      Saasaparilla::Notifier.invoice_created(billing_activity.subscription, self)
     end
     
 end

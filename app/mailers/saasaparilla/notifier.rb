@@ -12,13 +12,14 @@ class Saasaparilla::Notifier < ActionMailer::Base
     mail(:to => subscription.contact_info.email, :subject => "Invoice Created")
   end
 
-  def subscription_billing_successful(subscription, amount)
+  def billing_successful(subscription, amount)
     @subscription = subscription
     @amount = amount
     mail(:to => subscription.contact_info.email, :subject => "Account Billing Successful")
   end
 
-  def subscription_billing_failed(subscription)
+  def billing_failed(subscription)
+
     @subscription = subscription
     @url = edit_subscription_credit_card_url
     mail(:to => subscription.contact_info.email, :subject => "Account Billing Failed")

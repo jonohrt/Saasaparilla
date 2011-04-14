@@ -67,6 +67,7 @@ class Subscription < ActiveRecord::Base
     if charge_amount(bill_amount)
       set_next_billing_date
       set_status_active if balance == 0.0
+      send_billing_successful_email(bill_amount)
       return true
     end
 
@@ -85,10 +86,8 @@ class Subscription < ActiveRecord::Base
   end
   
   def billing_failed
-    
-      
     set_status_overdue
-    
+    send_billing_failed_email
     if billing_date < Date.today - Saasaparilla::CONFIG["grace_period"].days
       cancel
     end
@@ -225,6 +224,14 @@ class Subscription < ActiveRecord::Base
   
   def send_subscription_created_email
     Saasaparilla::Notifier.subscription_created(self)
+  end
+
+  def send_billing_successful_email(amount)
+    Saasaparilla::Notifier.billing_successful(self, amount)
+  end
+
+  def send_billing_failed_email
+    # Saasaparilla::Notifier.billing_failed(self)
   end
   
 end

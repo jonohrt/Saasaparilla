@@ -104,8 +104,15 @@ describe Subscription do
       @subscription.update_attributes(:balance => 30.0)
       @subscription.bill!(30.00)
       @subscription.billing_activities.count.should == 2
-      
     end
+    
+    it 'should send billing_successful email on charge' do
+      @subscription.save
+      @subscription.update_attributes(:balance => 30.0)
+      Saasaparilla::Notifier.should_receive(:billing_successful).with(@subscription, 30.0)
+      @subscription.bill!
+    end
+    
     it 'should subtract balance on bill!' do
       @subscription.save
       @subscription.billing_activities.count.should == 1
@@ -180,12 +187,14 @@ describe Subscription do
         @subscriptions.should include @subscription4
         
       end
+
       it 'should find billable models' do
         @subscription1.update_attributes(:balance => 0)
 
         @subscription4.update_attributes(:balance => 12, :status => "canceled")
         Subscription.active.all_billable_subscriptions(Date.today).count.should == 1
       end
+
     describe 'recurring billing' do
     
       it 'should reset charge subscription' do
@@ -194,23 +203,28 @@ describe Subscription do
         @subscription2.billing_activities.count.should == 2
         @subscription3.billing_activities.count.should == 1
         @subscription4.billing_activities.count.should == 2
-        
-        
       end
+
       it 'should change status of subscription to overdue if failed billing' do
         GATEWAYCIM.success = false
         Subscription.find_and_bill_recurring_subscriptions
         GATEWAYCIM.success = true
         @subscription1.reload.overdue?.should == true
-        
       end
+
+      # it 'should send billing_failed email if failed billing' do
+      #   GATEWAYCIM.success = false
+      #   Saasaparilla::Notifier.should_receive(:billing_failed).with(@subscription1)
+      #   Subscription.find_and_bill_recurring_subscriptions
+      #   GATEWAYCIM.success = true
+      # end
+
       it 'should change status of subscription to canceled if failed over grace period' do
         @subscription1.update_attributes(:billing_date => Date.today - 11.days, :status => "overdue")
         GATEWAYCIM.success = false
         Subscription.find_and_bill_recurring_subscriptions
         GATEWAYCIM.success = true
         @subscription1.reload.canceled?.should == true
-
       end
       
       it 'should not change status if subscription not past grace period on failed billing' do
