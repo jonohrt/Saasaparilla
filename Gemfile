@@ -20,7 +20,7 @@ gem 'dynamic_form'
 gem 'state_machine'
 gem 'i18n'
 group :development, :test do
-  gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
+  #gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
 	gem "autotest-growl"
 	gem "autotest-fsevent"
   gem "autotest-rails"
