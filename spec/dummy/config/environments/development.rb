@@ -25,17 +25,6 @@ Dummy::Application.configure do
   
   
   
-  config.after_initialize do
-    ActiveMerchant::Billing::Base.mode = :test
-    ::GATEWAYCIM = ActiveMerchant::Billing::AuthorizeNetCimGateway.new(
-      :login => "4fQ6B3Uyz",
-      :password => "4QH8JM8929epy2gt",
-      :test => true
-      )
 
-    ActiveMerchant::Billing::Base.gateway_mode = :test
-    ActiveMerchant::Billing::Base.integration_mode = :test
-      
-  end
 end
 
