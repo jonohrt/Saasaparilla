@@ -25,7 +25,7 @@ class Invoice < ActiveRecord::Base
     end
     
     def send_invoice_created_email
-      Saasaparilla::Notifier.invoice_created(billing_activity.subscription, self)
+      Saasaparilla::Notifier.invoice_created(billing_activity.subscription, self).deliver
     end
     
 end

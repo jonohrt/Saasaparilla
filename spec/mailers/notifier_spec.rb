@@ -5,6 +5,7 @@ describe 'Notifier' do
   describe 'subscription created email' do
 
     before(:all) do
+      ActionMailer::Base.deliveries = []
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
       credit_card = Factory.build(:credit_card)

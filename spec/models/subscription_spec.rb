@@ -6,15 +6,10 @@ describe Subscription do
   it { should have_many :billing_activities }
   it { should have_one :credit_card }
   
-  
-  
-
-  
   describe 'on create' do
     before(:each) do
        plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
        contact_info = Factory.build(:contact_info)
-     
        credit_card = Factory.build(:credit_card)
        @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
     end
@@ -42,8 +37,9 @@ describe Subscription do
     # end
   
     it 'should send subscription_created email' do
-      Saasaparilla::Notifier.should_receive(:subscription_created).with(@subscription)
+      ActionMailer::Base.deliveries = [];
       @subscription.save
+      ActionMailer::Base.deliveries.last.subject.should =~ /Subscription Created/
     end
   
     it 'should have status active' do
@@ -107,10 +103,11 @@ describe Subscription do
     end
     
     it 'should send billing_successful email on charge' do
+      ActionMailer::Base.deliveries = [];
       @subscription.save
       @subscription.update_attributes(:balance => 30.0)
-      Saasaparilla::Notifier.should_receive(:billing_successful).with(@subscription, 30.0)
       @subscription.bill!
+      ActionMailer::Base.deliveries.first.subject.should =~ /Account Billing Successful/
     end
     
     it 'should subtract balance on bill!' do
@@ -153,12 +150,18 @@ describe Subscription do
       before(:each) do
           plan = Factory(:plan, :name => "Gold", :price => 20.0)
           plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "annually")
-          contact_info = Factory.build(:contact_info)
-          credit_card = Factory.build(:credit_card)
-          @subscription1 = Factory(:subscription, :contact_info => contact_info,  :plan => plan, :credit_card => credit_card)
-          @subscription2 = Factory(:subscription, :contact_info => contact_info,  :plan => plan, :credit_card => credit_card)
-          @subscription3 = Factory(:subscription, :contact_info => contact_info,  :plan => plan, :credit_card => credit_card)
-          @subscription4 = Factory(:subscription, :contact_info => contact_info,  :plan => plan2, :credit_card => credit_card)
+          contact_info1 = Factory.build(:contact_info)
+          contact_info2 = Factory.build(:contact_info)
+          contact_info3 = Factory.build(:contact_info)
+          contact_info4 = Factory.build(:contact_info)
+          credit_card1 = Factory.build(:credit_card)
+          credit_card2 = Factory.build(:credit_card)
+          credit_card3 = Factory.build(:credit_card)
+          credit_card4 = Factory.build(:credit_card)
+          @subscription1 = Factory(:subscription, :contact_info => contact_info1,  :plan => plan, :credit_card => credit_card1)
+          @subscription2 = Factory(:subscription, :contact_info => contact_info2,  :plan => plan, :credit_card => credit_card2)
+          @subscription3 = Factory(:subscription, :contact_info => contact_info3,  :plan => plan, :credit_card => credit_card3)
+          @subscription4 = Factory(:subscription, :contact_info => contact_info4,  :plan => plan2, :credit_card => credit_card4)
           @subscription1.update_attributes(:balance => 12, :billing_date => Date.today)
           @subscription2.update_attributes(:balance => 12, :billing_date => Date.today)
           @subscription3.update_attributes(:balance => 12, :billing_date => Date.today + 1.days)
@@ -176,7 +179,6 @@ describe Subscription do
       end
       
       it 'should find invoiceable models' do
-      
         @subscription1.update_attributes(:billing_date => (Date.today + 1.days))
         @subscription2.update_attributes(:billing_date => (Date.today + 6.days))
         @subscription3.update_attributes(:billing_date => (Date.today + 5.days), :invoiced_on => Date.today - 1.months)
@@ -185,12 +187,10 @@ describe Subscription do
         @subscriptions.count.should == 2
         @subscriptions.should include @subscription1
         @subscriptions.should include @subscription4
-        
       end
 
       it 'should find billable models' do
         @subscription1.update_attributes(:balance => 0)
-
         @subscription4.update_attributes(:balance => 12, :status => "canceled")
         Subscription.active.all_billable_subscriptions(Date.today).count.should == 1
       end
@@ -212,12 +212,16 @@ describe Subscription do
         @subscription1.reload.overdue?.should == true
       end
 
-      # it 'should send billing_failed email if failed billing' do
-      #   GATEWAYCIM.success = false
-      #   Saasaparilla::Notifier.should_receive(:billing_failed).with(@subscription1)
-      #   Subscription.find_and_bill_recurring_subscriptions
-      #   GATEWAYCIM.success = true
-      # end
+      it 'should send billing_failed email if failed billing' do
+        GATEWAYCIM.success = false
+        ActionMailer::Base.deliveries = [];
+        @subscription2.update_attributes(:status => 'canceled')
+        @subscription3.update_attributes(:status => 'canceled')
+        @subscription4.update_attributes(:status => 'canceled')
+        Subscription.find_and_bill_recurring_subscriptions
+        ActionMailer::Base.deliveries.first.subject.should =~ /Account Billing Failed/
+        GATEWAYCIM.success = true
+      end
 
       it 'should change status of subscription to canceled if failed over grace period' do
         @subscription1.update_attributes(:billing_date => Date.today - 11.days, :status => "overdue")
@@ -225,6 +229,30 @@ describe Subscription do
         Subscription.find_and_bill_recurring_subscriptions
         GATEWAYCIM.success = true
         @subscription1.reload.canceled?.should == true
+      end
+
+      it 'should send subscription_cancelled email if failed over grace period' do
+        ActionMailer::Base.deliveries = [];
+        @subscription1.update_attributes(:billing_date => Date.today - 11.days, :status => "overdue")
+        @subscription2.update_attributes(:status => 'canceled')
+        @subscription3.update_attributes(:status => 'canceled')
+        @subscription4.update_attributes(:status => 'canceled')
+        GATEWAYCIM.success = false
+        Subscription.find_and_bill_recurring_subscriptions
+        GATEWAYCIM.success = true
+        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription has been cancelled/
+      end
+
+      it 'should send pending_cancellation_notice email if failed and 1 day before over grace period' do
+        GATEWAYCIM.success = false
+        ActionMailer::Base.deliveries = [];
+        @subscription1.update_attributes(:billing_date => Date.today - 9.days, :status => "overdue")
+        @subscription2.update_attributes(:status => 'canceled')
+        @subscription3.update_attributes(:status => 'canceled')
+        @subscription4.update_attributes(:status => 'canceled')
+        Subscription.find_and_bill_recurring_subscriptions
+        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription will be cancelled soon/
+        GATEWAYCIM.success = true
       end
       
       it 'should not change status if subscription not past grace period on failed billing' do

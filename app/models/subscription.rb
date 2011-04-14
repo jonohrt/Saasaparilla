@@ -44,7 +44,6 @@ class Subscription < ActiveRecord::Base
       #find_all_subscriptions need billing
       @billable_subscriptions = Subscription.active.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
-        
         begin
           subscription.bill!(subscription.balance)
         rescue
@@ -83,11 +82,20 @@ class Subscription < ActiveRecord::Base
   
   def cancel
     set_canceled
+    send_subscription_cancelled_email
   end
   
   def billing_failed
     set_status_overdue
-    send_billing_failed_email
+
+    if billing_date == Date.today
+      send_billing_failed_email
+    end
+
+    if billing_date == Date.today - Saasaparilla::CONFIG["grace_period"].days + 1
+      send_pending_cancellation_notice_email
+    end
+
     if billing_date < Date.today - Saasaparilla::CONFIG["grace_period"].days
       cancel
     end
@@ -223,15 +231,23 @@ class Subscription < ActiveRecord::Base
   end
   
   def send_subscription_created_email
-    Saasaparilla::Notifier.subscription_created(self)
+    Saasaparilla::Notifier.subscription_created(self).deliver
   end
 
   def send_billing_successful_email(amount)
-    Saasaparilla::Notifier.billing_successful(self, amount)
+    Saasaparilla::Notifier.billing_successful(self, amount).deliver
   end
 
   def send_billing_failed_email
-    # Saasaparilla::Notifier.billing_failed(self)
+    Saasaparilla::Notifier.billing_failed(self).deliver
+  end
+
+  def send_pending_cancellation_notice_email
+    Saasaparilla::Notifier.pending_cancellation_notice(self).deliver
+  end
+
+  def send_subscription_cancelled_email
+    Saasaparilla::Notifier.subscription_cancelled(self).deliver
   end
   
 end

@@ -19,7 +19,6 @@ class Saasaparilla::Notifier < ActionMailer::Base
   end
 
   def billing_failed(subscription)
-
     @subscription = subscription
     @url = edit_subscription_credit_card_url
     mail(:to => subscription.contact_info.email, :subject => "Account Billing Failed")
