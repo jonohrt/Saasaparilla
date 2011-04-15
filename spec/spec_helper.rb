@@ -8,7 +8,7 @@ require "rspec/rails"
 require 'shoulda'
 require 'factory_girl_rails'
 require 'email_spec'
-
+require 'spec_helpers/spec_helpers'
 Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
 
 ActionMailer::Base.delivery_method = :test
