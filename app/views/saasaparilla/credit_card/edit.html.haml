@@ -1,9 +1,9 @@
 %h1 Update your credit card
 
 %h2 Current card
-= @credit_card.card_number
+= @current_card.card_number
 %br
-= "Exp: #{@credit_card.expiration_date}"
+= "Exp: #{@current_card.expiration_date}"
 	
 %h2 Update card
 = simple_form_for [@subscription, @credit_card] do |f|

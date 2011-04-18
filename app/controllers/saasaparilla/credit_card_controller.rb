@@ -1,16 +1,14 @@
 class Saasaparilla::CreditCardController < ApplicationController
   unloadable
-  
+  before_filter :set_subscription
+  before_filter :set_credit_cards
   
   
   def edit
-    @subscription = current_billable.subscription
-    @credit_card = @subscription.credit_card
+
   end
   
   def update
-    @subscription = current_billable.subscription
-    @credit_card = @subscription.credit_card
     begin 
       if @subscription.credit_card.update_attributes(params[:credit_card])
         flash[:notice] = "Your credit card was successfully updated."
@@ -25,6 +23,17 @@ class Saasaparilla::CreditCardController < ApplicationController
           render :action => "edit"
           flash.discard
       end
+  end
+ 
+  private 
+   
+  def set_subscription
+    @subscription = current_billable.subscription
+  end
+  
+  def set_credit_cards
+    @credit_card = @subscription.credit_card
+    @current_card = @credit_card.clone
   end
   
 end

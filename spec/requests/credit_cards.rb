@@ -61,6 +61,18 @@ describe 'CreditCard' do
       GATEWAYCIM.success= true
     end
     
+    it 'should keep current card the same om error' do
+      visit edit_subscription_credit_card_path
+      
+      fill_in "Card number", :with => "425656956545454"
+      select 'Visa', :from => "Card type"
+      select '12', :from => "Expiry month"
+      select (Date.today.year + 1).to_s, :from => "Expiry year"
+      click_on("Update Card")
+      page.should have_content("XXXXXXXXXXXX1111")
+      page.should have_content("10/2011")
+    end
+    
   end
     
   
