@@ -2,17 +2,19 @@ development:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
-  auth_dot_net_login: 
-  auth_dot_net_password:
+  auth_dot_net_login: login
+  auth_dot_net_password: pass
   
 test:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
+  auth_dot_net_login: login
+  auth_dot_net_password: pass
   
 production:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
-  auth_dot_net_login: 
-  auth_dot_net_password:
+  auth_dot_net_login: login
+  auth_dot_net_password: pass
