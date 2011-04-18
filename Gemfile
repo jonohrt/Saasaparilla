@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gemspec
 gem "rails", "3.0.5"
 
-#gem "sqlite3"
+gem "sqlite3"
 #gem 'jeweler'
 gem 'haml'
 
@@ -14,7 +14,7 @@ gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
 gem "jquery-rails"
 gem "dynamic_attributes"
 gem "authlogic"
-gem 'active_merchant'
+gem 'activemerchant'
 gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'

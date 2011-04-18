@@ -1,8 +1,9 @@
 require "saasaparilla"
 require "rails"
+require "active_merchant"
 require "action_controller"
 require 'yaml'
-require "active_merchant"
+
 require "dynamic_attributes"
 
 module Saasaparilla
