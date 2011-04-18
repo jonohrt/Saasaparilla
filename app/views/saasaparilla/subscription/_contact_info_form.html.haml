@@ -7,4 +7,11 @@
 = f.input :state
 = f.input :zip
 = f.input :country
-= f.input :phone_number
+.input.string.required
+	= f.label :phone, :required => true
+	= "("
+	= f.text_field :phone_area_code, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
+	= ")"
+	= f.text_field :phone_prefix, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
+	= " - "
+	= f.text_field :phone_suffix, :required => true, :size => 4, :maxlength => 4, :class => "phone_4"
