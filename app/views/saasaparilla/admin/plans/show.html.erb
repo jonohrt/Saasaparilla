@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Level:</b>
+  <%= @plan.level %>
+</p>
+
+<p>
+  <b>Billing period:</b>
+  <%= @plan.billing_period %>
+</p>
+
+<p>
+  <b>Subscription:</b>
+  <%= @plan.subscription_id %>
+</p>
+
+<p>
+  <b>Extras:</b>
+  <%= @plan.extras %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_plan_path(@plan) %> |
+<%= link_to 'Back', admin_plans_path %>

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  resources :plans, :controller => "saasaparilla/plans"
   
+  scope '/admin', :name_prefix => 'admin' do
+    resources :plans, :controller => "saasaparilla/admin/plans"
+  end
   
   
   resource :subscription, :controller => "saasaparilla/subscription"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418203614) do
+ActiveRecord::Schema.define(:version => 20110418213427) do
 
   create_table "billing_activities", :force => true do |t|
     t.float    "amount"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20110418203614) do
     t.string   "message"
     t.text     "params"
     t.integer  "billing_activity_id"
+    t.integer  "subscription_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

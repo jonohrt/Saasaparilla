@@ -1,4 +1,4 @@
-class Saasaparilla::PlansController < ApplicationController
+class Saasaparilla::Admin::PlansController < ApplicationController
   unloadable
   
   # GET /plans
@@ -46,7 +46,7 @@ class Saasaparilla::PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to(plans_path, :notice => 'Plan was successfully created.') }
+        format.html { redirect_to(admin_plans_path, :notice => 'Plan was successfully created.') }
         format.xml  { render :xml => @plan, :status => :created, :location => @plan }
       else
         format.html { render :action => "new" }
@@ -62,7 +62,7 @@ class Saasaparilla::PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.update_attributes(params[:plan])
-        format.html { redirect_to(plans_path, :notice => 'Plan was successfully updated.') }
+        format.html { redirect_to(admin_plans_path, :notice => 'Plan was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -78,7 +78,7 @@ class Saasaparilla::PlansController < ApplicationController
     @plan.destroy
 
     respond_to do |format|
-      format.html { redirect_to(plans_url) }
+      format.html { redirect_to(admin_plans_url) }
       format.xml  { head :ok }
     end
   end

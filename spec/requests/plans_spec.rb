@@ -4,7 +4,7 @@ describe 'Plans' do
   describe "GET /plans" do
     it "should display plans" do
       Factory.create(:plan, :name => "Gold")
-      visit plans_path
+      visit admin_plans_path
       page.should have_content("Gold")
     end
   end
@@ -12,7 +12,7 @@ describe 'Plans' do
   describe "POST /plans", :js => "true" do
     it "should create new plan"  do
       javascript do
-        visit new_plan_path
+        visit new_admin_plan_path
         fill_in "plan_name", :with => "Silver"
         fill_in "Price", :with => "12.99"
         fill_in "attribute_name", :with => "Testing123"
