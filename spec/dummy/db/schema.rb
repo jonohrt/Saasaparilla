@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110415174612) do
+ActiveRecord::Schema.define(:version => 20110418203614) do
 
   create_table "billing_activities", :force => true do |t|
     t.float    "amount"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20110415174612) do
     t.date     "billing_date"
     t.date     "invoiced_on"
     t.date     "overdue_on"
+    t.boolean  "no_charge",                   :default => false
     t.integer  "plan_id"
     t.datetime "created_at"
     t.datetime "updated_at"

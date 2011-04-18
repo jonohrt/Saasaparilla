@@ -4,7 +4,6 @@ class Subscription < ActiveRecord::Base
   has_many :transactions
   has_many :payments
 
-
   has_one :contact_info
   belongs_to :plan
   accepts_nested_attributes_for :contact_info
@@ -21,7 +20,6 @@ class Subscription < ActiveRecord::Base
   after_create :initial_bill
   after_create :send_subscription_created_email
   
-  
   validates_presence_of :plan, :message => "can't be blank"
   validates_associated :credit_card, :contact_info, :on => :create
   
@@ -36,6 +34,9 @@ class Subscription < ActiveRecord::Base
     where("billing_date <= ? and (invoiced_on > ? OR invoiced_on is null)", date + 5.days, (date - 1.months).to_time)
     }
 
+  scope :all_paid, where("no_charge != ?", true)
+
+
   Plan::BILLING_PERIODS.each do |period|
     define_method "#{period.downcase}?" do
       plan.billing_period.downcase == period.downcase
@@ -44,7 +45,7 @@ class Subscription < ActiveRecord::Base
   class << self
     def find_and_bill_recurring_subscriptions
       #find_all_subscriptions need billing
-      @billable_subscriptions = Subscription.active.all_billable_subscriptions(Date.today)
+      @billable_subscriptions = Subscription.active.all_paid.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
         begin
   
@@ -57,7 +58,7 @@ class Subscription < ActiveRecord::Base
     end
     
     def find_and_invoice_subscriptions
-      @invoiceable_subscriptions = Subscription.active.all_invoiceable(Date.today)
+      @invoiceable_subscriptions = Subscription.active.all_paid.all_invoiceable(Date.today)
       for subscription in @invoiceable_subscriptions
         subscription.invoice!
       end
