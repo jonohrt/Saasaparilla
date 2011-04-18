@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["jonohrt1@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Simple SAAS through Authorize.net}
-  s.description = %q{TODO: Write a gem description}
+  s.description = %q{Simple SAAS through Authorize.net}
 
   s.rubyforge_project = "saasaparilla"
 
