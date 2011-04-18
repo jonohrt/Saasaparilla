@@ -7,22 +7,14 @@ class Saasaparilla::SubscriptionController < ApplicationController
     @subscription = current_billable.build_subscription
     @subscription.build_contact_info
     @subscription.build_credit_card
-
-
-    
   end
   
   
   def create
     @subscription = current_billable.build_subscription(params[:subscription])
     
-
-    
     begin
       if @subscription.save
-        
-        debugger
-        
         redirect_to subscription_path
         flash[:notice] = "Your subscription was successfully created."
       else

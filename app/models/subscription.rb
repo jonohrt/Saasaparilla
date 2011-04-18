@@ -23,6 +23,7 @@ class Subscription < ActiveRecord::Base
   
   
   validates_presence_of :plan, :message => "can't be blank"
+  validates_associated :credit_card, :contact_info, :on => :create
   
   scope :active, where("status != ?", "canceled")
   
