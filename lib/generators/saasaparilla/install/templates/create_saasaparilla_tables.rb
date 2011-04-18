@@ -81,6 +81,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
        t.string :message
        t.text :params
        t.integer :billing_activity_id
+       t.integer :subscription_id
        t.timestamps
     end
     
@@ -97,6 +98,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
     drop_table :payments
     drop_table :invoices
     drop_table :invoice_line_items
+    drop_table :billing_activities
     
   end
 end
