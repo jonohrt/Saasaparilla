@@ -3,7 +3,7 @@ class BillingActivity < ActiveRecord::Base
   has_one :invoice
   has_one :transaction
   
-  MESSAGES = {:success => "Thank you for you payment."}
+  MESSAGES = {:success => "Thank you for your payment."}
   scope :recent, order("created_at DESC")
   
   scope :limit, lambda {|num|
