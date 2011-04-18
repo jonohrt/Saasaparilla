@@ -20,13 +20,13 @@ describe ContactInfo do
   it 'should have a valid phone numer' do
     contact_info = Factory(:contact_info)
     contact_info.update_attributes :phone_area_code => "123", :phone_prefix => "123", :phone_suffix => "1234"
-    contact_info.errors.should be_empty
+    contact_info.should be_valid
   end
 
   it 'should have errors with an invalid phone number' do
     contact_info = Factory(:contact_info)
     contact_info.update_attributes :phone_area_code => "1", :phone_prefix => "1", :phone_suffix => "1"
-    contact_info.errors[:base].length.should == 3
+    contact_info.should_not be_valid
   end
   
 end

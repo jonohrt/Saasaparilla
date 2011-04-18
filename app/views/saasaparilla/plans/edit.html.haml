@@ -1,0 +1,12 @@
+%h1 Change you plan
+
+
+= simple_form_for @subscription, :url => subscription_plan_path do |f|
+
+	= f.association :plan, :as => 'radio'
+		
+	= f.submit "Change Plan"
+	
+
+
+= link_to 'Back', subscription_path
