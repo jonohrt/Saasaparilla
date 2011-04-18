@@ -2,6 +2,7 @@ require "saasaparilla"
 require "rails"
 require "action_controller"
 require 'yaml'
+require "active_merchant"
 
 module Saasaparilla
   class Engine < Rails::Engine
