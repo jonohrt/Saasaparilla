@@ -10,6 +10,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.date :billing_date
       t.date :invoiced_on
       t.date :overdue_on
+      t.boolean :no_charge, :default => false
       t.integer :plan_id
       t.timestamps
     end
