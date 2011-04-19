@@ -1,0 +1,28 @@
+%h1 Subscription Detail
+
+%h2 Subscriber Contact Info
+%p
+	= "#{@subscription.first_name} #{@subscription.last_name}"
+	%br
+	= @subscription.address
+	%br
+	= "#{@subscription.city}, #{@subscription.state} #{@subscription.zip}"
+	%br
+	= "#{@subscription.phone_number}"
+	
+%h2 Subscription Details
+%p
+	="Status: "
+	= @subscription.status 
+	%br
+	= "Balance: "
+	= number_to_currency(@subscription.balance)
+	%br
+	= "Last Invoiced: "
+	= @subscription.invoiced_on.to_s(:month_day_year) unless @subscription.invoiced_on.nil?
+	%br
+	= "Last Transaction Date: "
+	= @subscription.last_transaction_date
+	%br
+	= "Last Transaction Amount: "
+	= number_to_currency(@subscription.last_transaction_amount)

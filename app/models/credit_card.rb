@@ -34,9 +34,9 @@ class CreditCard < ActiveRecord::Base
         when "Last name cannot be empty"
           errors[:card_name] = "cannot be empty"
         when "Month is not a valid month"
-          errors[:expiration_date] = "- Month is not a valid month"
+          errors[:expiry_month] = "Month is not a valid month"
         when "Year expired"
-          errors[:expiration_date] = "- Year expired"
+          errors[:expiry_year] = "Year expired"
         when "Number is not a valid credit card number"
           errors[:card_number] = "is not a valid credit card number"
         when "Verification value is required"
@@ -83,6 +83,7 @@ class CreditCard < ActiveRecord::Base
   end
   
   def update_payment_profile
+    
     unless new_record?
       @profile = {:customer_profile_id => subscription.customer_cim_id,
                     :payment_profile => {:customer_payment_profile_id => subscription.customer_payment_profile_id, 
@@ -90,7 +91,6 @@ class CreditCard < ActiveRecord::Base
                                          :payment =>  {:credit_card => active_merchant_card}
                     }
                 }
-        
         response = GATEWAYCIM.update_customer_payment_profile(@profile)
         if response.success?
           return true

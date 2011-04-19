@@ -5,6 +5,7 @@ development:
   auth_dot_net_login: login
   auth_dot_net_password: pass
   include_free_account: false
+  authorization: cancan
   
 test:
   grace_period: 10    
@@ -13,7 +14,8 @@ test:
   auth_dot_net_login: login
   auth_dot_net_password: pass
   include_free_account: false
-    
+  authorization: none
+  
 production:
   grace_period: 10    
   from_email: test@dev.com
@@ -21,3 +23,4 @@ production:
   auth_dot_net_login: login
   auth_dot_net_password: pass
   include_free_account: false  
+  authorization: cancan

@@ -21,7 +21,7 @@ class Transaction < ActiveRecord::Base
   scope :successful, lambda {
     where("success = ?", true)
     }
-    
+  scope :recent, order("created_at DESC")
     
   private
     def generate_billing_activity

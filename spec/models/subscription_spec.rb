@@ -151,11 +151,19 @@ describe Subscription do
       @subscription.status.should == "canceled"
    
     end
-    
+    it 'should return last transaction date' do
+      @subscription.save
+      @subscription.last_transaction_date.should == Date.today.to_s(:month_day_year)
+    end
 
+    it 'should return - if no transactions on last transaction date' do
+      @subscription.last_transaction_date.should == '-'
+    end
     
-    
-  end
+    it 'should return plan name' do
+      @subscription.plan_name.should == "Gold"
+    end
+  end 
   
   describe 'billing' do
       before(:each) do
@@ -352,6 +360,7 @@ describe Subscription do
         @subscription1.invoice!
         @subscription1.billing_activities.last.invoice.invoice_line_items.first.to.should == @subscription1.billing_date
       end
+      
       
     end
   end
