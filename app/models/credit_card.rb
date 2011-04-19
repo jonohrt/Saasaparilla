@@ -83,6 +83,7 @@ class CreditCard < ActiveRecord::Base
   end
   
   def update_payment_profile
+    
     unless new_record?
       @profile = {:customer_profile_id => subscription.customer_cim_id,
                     :payment_profile => {:customer_payment_profile_id => subscription.customer_payment_profile_id, 
@@ -90,7 +91,6 @@ class CreditCard < ActiveRecord::Base
                                          :payment =>  {:credit_card => active_merchant_card}
                     }
                 }
-        
         response = GATEWAYCIM.update_customer_payment_profile(@profile)
         if response.success?
           return true

@@ -203,8 +203,10 @@ class Subscription < ActiveRecord::Base
     #Login to the gateway using your credentials in environment.rb
      #setup the user object to save
      @profile = {:profile => profile}
+  
      #send the create message to the gateway API
      response = ::GATEWAYCIM.create_customer_profile(@profile)
+    
      if response.success? and response.authorization
        self.customer_cim_id = response.authorization
        return true

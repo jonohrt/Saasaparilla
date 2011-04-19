@@ -2,6 +2,7 @@ class Saasaparilla::SubscriptionController < ApplicationController
   unloadable
   
   before_filter :get_subscription, :only => [:show, :destroy]
+  before_filter :require_no_subscription, :only => [:new]
   #overide with authorization
   def new
     @subscription = current_billable.build_subscription
@@ -45,6 +46,12 @@ class Saasaparilla::SubscriptionController < ApplicationController
   end
   
   private
+  def require_no_subscription
+    unless current_billable.subscription.nil?
+      flash[:error] = "You already ahve a subscription"
+      redirect_to subscription_path
+    end
+  end
   def get_subscription
     @subscription = current_billable.subscription
     if @subscription.nil?
