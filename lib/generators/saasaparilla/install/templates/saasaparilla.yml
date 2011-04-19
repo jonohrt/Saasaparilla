@@ -4,6 +4,7 @@ development:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  authorization: cancan
   
 test:
   grace_period: 10    
@@ -11,6 +12,7 @@ test:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  authorization: none
   
 production:
   grace_period: 10    
@@ -18,3 +20,4 @@ production:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  authorization: cancan

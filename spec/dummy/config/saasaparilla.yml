@@ -4,11 +4,13 @@ development:
   trial_period: 0
   auth_dot_net_login: 4fQ6B3Uyz
   auth_dot_net_password: 4QH8JM8929epy2gt
+  authorization: cancan
   
 test:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
+  authorization: none
   
 production:
   grace_period: 10    
@@ -16,3 +18,4 @@ production:
   trial_period: 0
   auth_dot_net_login: user
   auth_dot_net_password: pass
+  authorization: cancan
