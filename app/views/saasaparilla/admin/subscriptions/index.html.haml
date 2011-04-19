@@ -1,0 +1,13 @@
+%h1 Listing Subscriptions
+
+%table
+	%tr
+		%th Email
+		%th Sign up 
+		%th Last Transaction Date
+		%th Status
+		%th Plan
+	
+	= render :partial => "subscription", :collection => @subscriptions
+	
+	= will_paginate @subscriptions

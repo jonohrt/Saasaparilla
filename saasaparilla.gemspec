@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   #s.add_runtime_dependency(%q<saasaparilla>, [">= 0"])
   #s.add_runtime_dependency(%q<rails>, ["= 3.0.5"])
   #s.add_runtime_dependency(%q<sqlite3>, [">= 0"])
+  s.add_runtime_dependency(%q<will_paginate>, [">=0"])
   s.add_runtime_dependency(%q<haml>, [">= 0"])
   s.add_runtime_dependency(%q<jquery-rails>, [">= 0"])
   s.add_runtime_dependency(%q<dynamic_attributes>, [">= 0"])

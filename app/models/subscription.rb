@@ -42,6 +42,15 @@ class Subscription < ActiveRecord::Base
       plan.billing_period.downcase == period.downcase
     end
   end
+  
+  ContactInfo.column_names.each do |col|
+    unless col.include? "id"
+      define_method "#{col}" do
+        contact_info.send(col)
+      end
+    end
+  end
+  
   class << self
     def find_and_bill_recurring_subscriptions
       #find_all_subscriptions need billing
@@ -66,6 +75,27 @@ class Subscription < ActiveRecord::Base
   end
   
   
+  def last_transaction_date
+    @transaction = transactions.recent.first
+    if @transaction.nil?
+      "-"
+    else
+      @transaction.created_at.to_s(:month_day_year)
+    end
+  end
+  
+  def last_transaction_amount
+    @transaction = transactions.recent.first
+    if @transaction.nil?
+      "-"
+    else
+      @transaction.amount
+    end
+  end
+  
+  def plan_name
+    plan.name
+  end
   def initial_bill
     if Saasaparilla::CONFIG["trial_period"] > 0
       set_next_billing_date(Saasaparilla::CONFIG["trial_period"])

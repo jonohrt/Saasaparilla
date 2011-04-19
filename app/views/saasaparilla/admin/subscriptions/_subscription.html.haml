@@ -1,0 +1,7 @@
+%tr
+	%td= subscription.email
+	%td= subscription.created_at.to_s(:month_day_year) 
+	%td= subscription.last_transaction_date
+	%td= subscription.status
+	%td= subscription.plan_name
+	%td= link_to "Show Detail", admin_subscription_path(subscription)
