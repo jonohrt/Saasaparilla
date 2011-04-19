@@ -76,7 +76,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
     
     create_table :transactions do |t|
        t.string :action
-       t.integer :amount
+       t.float :amount
        t.boolean :success
        t.string :authorization
        t.string :message
