@@ -15,3 +15,4 @@
 	= f.text_field :phone_prefix, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
 	= " - "
 	= f.text_field :phone_suffix, :required => true, :size => 4, :maxlength => 4, :class => "phone_4"
+	= f.error :phone_number, :id => 'phone_error'

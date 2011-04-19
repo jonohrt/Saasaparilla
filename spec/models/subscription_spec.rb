@@ -14,6 +14,11 @@ describe Subscription do
        @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
     end
     
+    it 'should be invalid with invalid contact_info' do
+      @subscription.contact_info.update_attributes(:phone_area_code => "1", :phone_prefix => "1", :phone_suffix => "1")
+      @subscription.should_not be_valid
+    end
+    
     it 'should make parent billable if is_billable' do
      
       user = Factory.create(:user, :subscription => @subscription)

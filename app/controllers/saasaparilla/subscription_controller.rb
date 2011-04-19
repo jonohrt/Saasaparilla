@@ -15,6 +15,7 @@ class Saasaparilla::SubscriptionController < ApplicationController
     
     begin
       if @subscription.save
+        
         redirect_to subscription_path
         flash[:notice] = "Your subscription was successfully created."
       else

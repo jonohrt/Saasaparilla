@@ -1,19 +1,17 @@
 class ContactInfo < ActiveRecord::Base
   
   belongs_to :subscription, :dependent => :destroy
-  validates_presence_of :first_name
-  validates_presence_of :last_name
-  validates_presence_of :email
+  validates_presence_of :first_name, :last_name, :email, :address, :city, :state, :zip, :country
   validates_format_of   :email, :with => ::Authlogic::Regex.email
-  validates_presence_of :address
-  validates_presence_of :city
-  validates_presence_of :state
-  validates_presence_of :zip
   validates_format_of   :zip, :with => /^\d{5}$/
-  validates_presence_of :country
-  
-  before_save :update_phone_number
-  before_save :validate_phone_number
+  validates_numericality_of :phone_area_code, :phone_prefix, :phone_suffix
+  validates_length_of :phone_area_code, :is => 3
+  validates_length_of :phone_prefix, :is => 3
+  validates_length_of :phone_suffix, :is => 4
+  validates_format_of :phone_number, :with => /\d\d\d-\d\d\d-\d\d\d\d/
+    
+  before_validation :update_phone_number
+  # before_save :validate_phone_number
   
   attr_accessor :phone_area_code, :phone_prefix, :phone_suffix
 
@@ -53,33 +51,33 @@ class ContactInfo < ActiveRecord::Base
     end
   end
 
-  def validate_phone_number
-    return_value = true
-    unless self.phone_area_code.length == 3
-      self.errors.add(:base, "Area code must be three digits.")
-      return_value = false
-    end
-    unless (/[0-9]/).match(self.phone_area_code)
-      self.errors.add(:base, "Area code must be numbers only.")
-      return_value = false
-    end
-    unless self.phone_prefix.length == 3
-      self.errors.add(:base, "Phone prefix must be three digits.")
-      return_value = false
-    end
-    unless (/[0-9]/).match(self.phone_prefix)
-      self.errors.add(:base, "Phone prefix must be numbers only.")
-      return_value = false
-    end
-    unless self.phone_suffix.length == 4
-      self.errors.add(:base, "Phone suffix must be four digits.")
-      return_value = false
-    end
-    unless (/[0-9]/).match(self.phone_suffix)
-      self.errors.add(:base, "Phone suffix must be numbers only.")
-      return_value = false
-    end
-    return_value
-  end
+  # def validate_phone_number
+  #   return_value = true
+  #   unless self.phone_area_code.length == 3
+  #     self.errors.add(:base, "Area code must be three digits.")
+  #     return_value = false
+  #   end
+  #   unless (/[0-9]/).match(self.phone_area_code)
+  #     self.errors.add(:base, "Area code must be numbers only.")
+  #     return_value = false
+  #   end
+  #   unless self.phone_prefix.length == 3
+  #     self.errors.add(:base, "Phone prefix must be three digits.")
+  #     return_value = false
+  #   end
+  #   unless (/[0-9]/).match(self.phone_prefix)
+  #     self.errors.add(:base, "Phone prefix must be numbers only.")
+  #     return_value = false
+  #   end
+  #   unless self.phone_suffix.length == 4
+  #     self.errors.add(:base, "Phone suffix must be four digits.")
+  #     return_value = false
+  #   end
+  #   unless (/[0-9]/).match(self.phone_suffix)
+  #     self.errors.add(:base, "Phone suffix must be numbers only.")
+  #     return_value = false
+  #   end
+  #   return_value
+  # end
   
 end

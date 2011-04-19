@@ -1,5 +1,12 @@
 %h1 Subscription
 
+%h2 Plan
+
+%p 
+	= "You are currently subscribed to the #{@subscription.plan.name} plan."
+%p
+	= link_to "Change plan", edit_subscription_plan_path
+
 %h2 Contact Info
 
 %p
