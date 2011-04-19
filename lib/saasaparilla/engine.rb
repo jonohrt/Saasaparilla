@@ -17,10 +17,8 @@ module Saasaparilla
         Saasaparilla::CONFIG = YAML.load(raw_config)[RAILS_ENV]
       end
       require 'initializers/auth_dot_net'
-      ActiveSupport.on_load(:action_controller) do
-        extend Authorization::ClassMethods
-        include Authorization::InstanceMethods
-      end
+      
+
     end
     
 

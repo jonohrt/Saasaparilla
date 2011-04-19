@@ -10,6 +10,8 @@ test:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
+  auth_dot_net_login: user
+  auth_dot_net_password: pass
   authorization: none
   
 production:
