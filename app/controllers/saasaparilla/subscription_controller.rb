@@ -48,7 +48,7 @@ class Saasaparilla::SubscriptionController < ApplicationController
   private
   def require_no_subscription
     unless current_billable.subscription.nil?
-      flash[:error] = "You already ahve a subscription"
+      flash[:error] = "You already have a subscription"
       redirect_to subscription_path
     end
   end
