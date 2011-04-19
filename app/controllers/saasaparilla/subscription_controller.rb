@@ -9,7 +9,6 @@ class Saasaparilla::SubscriptionController < ApplicationController
     @subscription.build_credit_card
   end
   
-  
   def create
     @subscription = current_billable.build_subscription(params[:subscription])
     

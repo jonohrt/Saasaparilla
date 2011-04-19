@@ -4,6 +4,7 @@ development:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  include_free_account: false
   
 test:
   grace_period: 10    
@@ -11,10 +12,12 @@ test:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
-  
+  include_free_account: false
+    
 production:
   grace_period: 10    
   from_email: test@dev.com
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  include_free_account: false  

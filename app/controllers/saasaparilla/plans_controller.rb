@@ -4,15 +4,19 @@ class Saasaparilla::PlansController < ApplicationController
   before_filter :get_subscription, :only => [:edit, :update]
   
   def edit
+    @plans = Plan.all(:order => 'price ASC')
   end
 
   def update
-    if @subscription.update_attributes(params[:subscription])
+    if params[:subscription][:plan_id] == ""
+      @subscription.cancel
+      redirect_to(subscription_path, :notice => 'You have been downgraded to the free account.')
+      return
+    elsif @subscription.update_attributes(params[:subscription])
       redirect_to(subscription_path, :notice => 'Plan was successfully changed.')
     else
       render :action => "edit"
     end
-
   end
   
   private 
