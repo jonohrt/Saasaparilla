@@ -15,6 +15,10 @@
 	="Status: "
 	= @subscription.status 
 	%br
+	- if @subscription.no_charge
+		Complimentary (no_charge):
+		= @subscription.no_charge 
+		%br
 	= "Balance: "
 	= number_to_currency(@subscription.balance)
 	%br
@@ -26,3 +30,15 @@
 	%br
 	= "Last Transaction Amount: "
 	= number_to_currency(@subscription.last_transaction_amount)
+	%br
+	%br
+	= link_to "See all transactions", admin_subscription_transactions_path(@subscription)
+	
+%h2 Actions
+%p
+	= link_to "Cancel Subscription", cancel_admin_subscription_path(@subscription), :confirm => "Are you sure you want to cancel this subscription?" unless @subscription.status == "canceled" 
+	%br
+	- if @subscription.no_charge
+		= link_to "Revoke complimentary subscription", toggle_no_charge_admin_subscription_path(@subscription), :confirm => "Are you sure you want to comp this subscription?"
+	- else 
+		= link_to "Make subscription complimentary", toggle_no_charge_admin_subscription_path(@subscription), :confirm => "Are you sure you want to comp this subscription?"

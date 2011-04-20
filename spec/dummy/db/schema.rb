@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418213427) do
+ActiveRecord::Schema.define(:version => 20110420185401) do
 
   create_table "billing_activities", :force => true do |t|
     t.float    "amount"

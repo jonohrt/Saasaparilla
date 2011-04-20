@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   
   scope '/admin', :name_prefix => 'admin' do
     resources :plans, :controller => "saasaparilla/admin/plans"
-    resources :subscriptions, :controller => "saasaparilla/admin/subscriptions"
+    resources :subscriptions, :controller => "saasaparilla/admin/subscriptions" do
+      get 'cancel', :on => :member
+      get 'toggle_no_charge', :on => :member
+      resources :transactions, :controller => "saasaparilla/admin/transactions", :only => [:index]
+    end
   end
   
   resource :subscription, :controller => "saasaparilla/subscription" do 

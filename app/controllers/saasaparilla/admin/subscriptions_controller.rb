@@ -13,9 +13,22 @@ class Saasaparilla::Admin::SubscriptionsController < ApplicationController
     @subscription = Subscription.find(params[:id])
   end
   
+  def toggle_no_charge
+    @subscription = Subscription.find(params[:id])
+    @subscription.toggle!(:no_charge)
+    redirect_to admin_subscription_path(@subscription)
+    if @subscription.no_charge
+      flash[:notice] = "Subscription will not be charged."
+    else
+      flash[:notice] = "Subscription will now be charged."
+    end
+  end
   
-  
-  
-  
+  def cancel
+    @subscription = Subscription.find(params[:id])
+    @subscription.cancel
+    redirect_to admin_subscription_path(@subscription)
+    flash[:notice] = "Subscription was cancelled."
+  end
   
 end

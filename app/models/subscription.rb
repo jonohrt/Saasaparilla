@@ -151,6 +151,7 @@ class Subscription < ActiveRecord::Base
     end
   end
   
+
   private
   
   def create_invoice
