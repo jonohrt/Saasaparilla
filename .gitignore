@@ -9,3 +9,5 @@ Gemfile.lock
 spec/dummy/db/migrate/*
 tmp/
 coverage/
+spec/dummy/db/schema.rb
+spec/dummy/db/test.sqlite3-journal
