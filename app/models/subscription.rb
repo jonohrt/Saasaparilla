@@ -22,8 +22,7 @@ class Subscription < ActiveRecord::Base
   validates_presence_of :plan, :message => "can't be blank"
   validates_associated :credit_card, :contact_info, :on => :create
   
-  # attr_accessor :old_plan_price
-  
+
   scope :active, where("status != ?", "canceled")
   
   scope :all_billable_subscriptions, lambda {|date|
@@ -130,6 +129,7 @@ class Subscription < ActiveRecord::Base
   end
   
   def reactivate!
+    self.update_attributes(:billing_date => nil)
     self.balance = 0
     add_to_balance(plan.price)
     bill!
@@ -171,10 +171,9 @@ class Subscription < ActiveRecord::Base
       if billing_date.nil?
         self.update_attributes(:billing_date => Date.today + 1.months + grace_period.months)
       else
-        
         self.update_attributes(:billing_date => billing_date + 1.months)
       end
-   
+      
     elsif annually?
       if billing_date.nil?
         self.update_attributes(:billing_date => Date.today + 1.years + grace_period.months)
@@ -300,9 +299,13 @@ class Subscription < ActiveRecord::Base
             percentage = time_to_credit / 1.year
           end
           credit = (old_plan_price * percentage).round(1)
+          
+          # debugger
+          
           old_plan_price = nil
           @changed_attributes.clear
           add_to_balance(plan.price - credit)
+          self.update_attributes(:billing_date => nil)
           bill!
         end
       end

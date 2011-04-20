@@ -43,6 +43,10 @@
 		= link_to "Update", edit_subscription_credit_card_path(@subscription.credit_card)
 	
 	%h2 Billing History
+	
+	%p
+		= "Your next billing date is #{@subscription.billing_date.to_s(:month_day_year)}"
+	
 	%table
 	
 		= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @subscription.billing_activities.recent.limit(5)

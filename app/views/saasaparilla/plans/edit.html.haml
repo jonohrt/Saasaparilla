@@ -1,11 +1,13 @@
 %h1 Change you plan
 - if Saasaparilla::CONFIG["include_free_account"]
-  Free Account
+  Free Plan
   = button_to "Downgrade", {:action => :update, :subscription => {:plan_id => nil}}, {:method => :put, :confirm => 'Are you sure you want downgrade to the free plan?'}
+  %p
+    If you downgrade to the free plan, you may reactivate your paid subscription at a later date.
   %br
   
 - @plans.each do |plan|
-  = plan.name
+  = "#{plan.name}: #{number_to_currency(plan.price)}"
   - if @subscription.plan_id == plan.id
     %br
     You are currently subscribed to this plan
@@ -14,9 +16,13 @@
   - else 
     - if plan.price > @subscription.plan.price
       = button_to "Upgrade", {:action => :update, :subscription => {:plan_id => plan.id}}, {:method => :put, :confirm => 'Are you sure you want to upgrade your plan?'} 
+      %p
+        If you choose to upgrade, you will be put on the new plan immediately. You will be charged the new rate minus a pro-rated credit for your current cycle.
       %br
     - else
       = button_to "Downgrade", {:action => :update, :subscription => {:plan_id => plan.id}}, {:method => :put, :confirm => 'Are you sure you want to downgrade your plan?'} 
+      %p
+        The downgrade will occur at the end of your current billing cycle. You will remain on your current plan until then.
       %br
 
 = link_to 'Back', subscription_path
