@@ -1,6 +1,6 @@
 class Saasaparilla::PlansController < ApplicationController
   unloadable
-  
+  include Authentication::InstanceMethods
   before_filter :get_subscription, :only => [:edit, :update]
   
   def edit
@@ -28,5 +28,7 @@ class Saasaparilla::PlansController < ApplicationController
       redirect_to new_subscription_path
     end
   end
+  
+  
   
 end

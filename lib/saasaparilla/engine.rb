@@ -5,7 +5,8 @@ require "action_controller"
 require 'yaml'
 
 require "dynamic_attributes"
-require 'extensions/action_controller/authorization'
+require 'saasaparilla/authentication'
+require 'saasaparilla/authorization'
 module Saasaparilla
   class Engine < Rails::Engine
     

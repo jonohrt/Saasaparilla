@@ -9,7 +9,9 @@ module Authorization
           redirect_to '/'
           flash[:error] = exception.to_s
         end
+        
         base.load_and_authorize_resource 
+        
       end
         # Override this module an initializer with Authorization::InstanceMethods.module_eval and add your own authorization
        # base.before_filter :custom_method
@@ -19,5 +21,6 @@ module Authorization
      # def custom_method
      
      # end
+    
   end
 end

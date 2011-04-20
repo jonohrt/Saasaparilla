@@ -1,5 +1,6 @@
 class Saasaparilla::PaymentsController < ApplicationController
   unloadable
+  include Authentication::InstanceMethods
   before_filter :get_subscription
   before_filter :get_payment, :only => [:edit, :update]
   before_filter :check_pending, :only => [:edit, :update]
@@ -62,6 +63,7 @@ class Saasaparilla::PaymentsController < ApplicationController
     end
     
   end
+  
   
 
   

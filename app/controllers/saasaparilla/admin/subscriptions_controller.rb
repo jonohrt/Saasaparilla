@@ -1,7 +1,7 @@
-class Saasaparilla::Admin::SubscriptionsController < ActionController::Base
+class Saasaparilla::Admin::SubscriptionsController < ApplicationController
   
   unloadable
-
+  include Authentication::InstanceMethods
   include Authorization::InstanceMethods
   
   # GET /admin/subscriptions
