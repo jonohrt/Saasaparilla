@@ -26,3 +26,6 @@
 	%br
 	= "Last Transaction Amount: "
 	= number_to_currency(@subscription.last_transaction_amount)
+	%br
+	%br
+	= link_to "See all transactions", admin_subscription_transactions_path(@subscription)

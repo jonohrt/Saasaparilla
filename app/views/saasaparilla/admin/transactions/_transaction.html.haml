@@ -1,0 +1,6 @@
+%tr
+	%td= transaction.created_at.to_s(:month_day_year) 
+	%td= transaction.amount
+	%td= transaction.success
+	%td= transaction.action
+	%td= transaction.message
