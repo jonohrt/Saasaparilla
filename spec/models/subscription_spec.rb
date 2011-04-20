@@ -165,6 +165,46 @@ describe Subscription do
     end
   end 
   
+  describe 'on update' do
+    before(:each) do
+       @plan1 = Factory.build(:plan, :name => "Basic", :price => 10.0)
+       @plan2 = Factory.build(:plan, :name => "Premium", :price => 20.0)
+       contact_info = Factory.build(:contact_info)
+       credit_card = Factory.build(:credit_card)
+       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => @plan1, :credit_card => credit_card)
+       @subscription.save
+    end
+    
+    it 'should bill correct amount with pro-rated credit for mid-cycle upgrades' do
+      @subscription.update_attributes(:billing_date => Date.today + 15.days)
+      @subscription.update_attributes(:plan => @plan2)
+      @subscription.billing_activities.count.should == 2
+      @subscription.billing_activities.last.amount.should == 15.0
+    end
+
+    it 'should bill correct amount with pro-rated credit for early-cycle upgrades' do
+      @subscription.update_attributes(:billing_date => Date.today + 29.days)
+      @subscription.update_attributes(:plan => @plan2)
+      @subscription.billing_activities.count.should == 2
+      @subscription.billing_activities.last.amount.should == 10.3
+    end
+
+    it 'should not bill for upgrades on currently invoiced accounts' do
+      @subscription.update_attributes(:billing_date => Date.today + 3.days)
+      @subscription.update_attributes(:plan => @plan2)
+      @subscription.billing_activities.count.should == 1
+    end
+
+    it 'should reactivate cancelled accounts' do
+      @subscription.update_attributes(:status => "canceled")
+      @subscription.reactivate!
+      @subscription.status.should == "active"
+      @subscription.billing_activities.count.should == 2
+    end
+
+    
+  end
+  
   describe 'billing' do
       before(:each) do
           plan = Factory(:plan, :name => "Gold", :price => 20.0)

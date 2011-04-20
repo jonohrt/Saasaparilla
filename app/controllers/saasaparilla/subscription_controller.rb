@@ -1,7 +1,9 @@
 class Saasaparilla::SubscriptionController < ApplicationController
   unloadable
+
   include Authentication::InstanceMethods
-  before_filter :get_subscription, :only => [:show, :destroy]
+  before_filter :get_subscription, :only => [:show, :destroy, :reactivate]
+
   before_filter :require_no_subscription, :only => [:new]
   #overide with authorization
   def new
@@ -9,7 +11,6 @@ class Saasaparilla::SubscriptionController < ApplicationController
     @subscription.build_contact_info
     @subscription.build_credit_card
   end
-  
   
   def create
     @subscription = current_billable.build_subscription(params[:subscription])
@@ -36,6 +37,15 @@ class Saasaparilla::SubscriptionController < ApplicationController
 
   end
   
+  def reactivate
+    if @subscription.reactivate!
+      redirect_to subscription_path
+      flash[:notice] = "Your subscription was successfully reactivated."
+    else
+      redirect_to subscription_path
+      flash[:error] = "There was a problem reactivating your account."
+    end
+  end
   
   def destroy
     if @subscription.cancel

@@ -3,7 +3,6 @@ class Subscription < ActiveRecord::Base
   has_statuses "active", "overdue", "suspended", "pending_cancel", "canceled"
   has_many :transactions
   has_many :payments
-
   has_one :contact_info
   belongs_to :plan
   accepts_nested_attributes_for :contact_info
@@ -19,9 +18,11 @@ class Subscription < ActiveRecord::Base
   after_rollback :delete_profile
   after_create :initial_bill
   after_create :send_subscription_created_email
-  
+  after_save :check_if_should_bill_for_upgrade, :on => :update
   validates_presence_of :plan, :message => "can't be blank"
   validates_associated :credit_card, :contact_info, :on => :create
+  
+  # attr_accessor :old_plan_price
   
   scope :active, where("status != ?", "canceled")
   
@@ -57,7 +58,6 @@ class Subscription < ActiveRecord::Base
       @billable_subscriptions = Subscription.active.all_paid.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
         begin
-  
           subscription.bill!(subscription.balance)
         rescue
           subscription.billing_failed
@@ -104,6 +104,7 @@ class Subscription < ActiveRecord::Base
     end
     
   end
+  
   def bill!(bill_amount = nil)
     bill_amount ||= balance
     if charge_amount(bill_amount)
@@ -128,6 +129,12 @@ class Subscription < ActiveRecord::Base
     send_subscription_cancelled_email
   end
   
+  def reactivate!
+    self.balance = 0
+    add_to_balance(plan.price)
+    bill!
+  end
+  
   def billing_failed
     set_status_overdue
 
@@ -148,8 +155,6 @@ class Subscription < ActiveRecord::Base
   
   def create_invoice
     @invoice = Invoice.create(:subscription => self, :price => plan.price, :from => get_beginning_of_billing_cycle, :to => billing_date)
-    
- 
   end
   
   def get_beginning_of_billing_cycle
@@ -273,6 +278,35 @@ class Subscription < ActiveRecord::Base
   def delete_profile
     if new_record?
       response = GATEWAYCIM::delete_customer_profile(:customer_profile_id => self.customer_cim_id) if customer_cim_id
+    end
+  end
+  
+  def check_if_should_bill_for_upgrade
+    if plan_id_changed? && !new_record? && plan_id_was != nil
+      old_plan_price = Plan.find(plan_id_was).price
+      if !old_plan_price.nil? && old_plan_price < plan.price
+        # Upgrade
+        if billing_date <= Date.today + 5.days
+          # For accounts w/ current invoice and close to renew date. Should recieve a few days free on new plan
+          balance = plan.price
+          old_plan_price = nil
+        else 
+          # Pro-rate for account in the middle of billing cycle. Should recieve a credit. 
+          if monthly?
+            time_to_credit = billing_date.to_time - Date.today.to_time
+            percentage = time_to_credit / 1.month
+          elsif yearly?
+            time_to_credit = billing_date.to_time - Date.today.to_time
+            percentage = time_to_credit / 1.year
+          end
+          credit = (old_plan_price * percentage).round(1)
+          old_plan_price = nil
+          @changed_attributes.clear
+          add_to_balance(plan.price - credit)
+          bill!
+        end
+      end
+      # Do nothing for downgrade. Plan won't change until next cycle.
     end
   end
   

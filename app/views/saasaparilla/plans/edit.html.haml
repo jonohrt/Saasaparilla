@@ -1,12 +1,22 @@
 %h1 Change you plan
-
-
-= simple_form_for @subscription, :url => subscription_plan_path do |f|
-
-	= f.association :plan, :as => 'radio'
-		
-	= f.submit "Change Plan"
-	
-
+- if Saasaparilla::CONFIG["include_free_account"]
+  Free Account
+  = button_to "Downgrade", {:action => :update, :subscription => {:plan_id => nil}}, {:method => :put, :confirm => 'Are you sure you want downgrade to the free plan?'}
+  %br
+  
+- @plans.each do |plan|
+  = plan.name
+  - if @subscription.plan_id == plan.id
+    %br
+    You are currently subscribed to this plan
+    %br
+    %br
+  - else 
+    - if plan.price > @subscription.plan.price
+      = button_to "Upgrade", {:action => :update, :subscription => {:plan_id => plan.id}}, {:method => :put, :confirm => 'Are you sure you want to upgrade your plan?'} 
+      %br
+    - else
+      = button_to "Downgrade", {:action => :update, :subscription => {:plan_id => plan.id}}, {:method => :put, :confirm => 'Are you sure you want to downgrade your plan?'} 
+      %br
 
 = link_to 'Back', subscription_path

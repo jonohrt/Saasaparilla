@@ -4,6 +4,7 @@ development:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  include_free_account: false
   authorization: cancan
   
 test:
@@ -12,6 +13,7 @@ test:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  include_free_account: false
   authorization: none
   
 production:
@@ -20,4 +22,5 @@ production:
   trial_period: 0
   auth_dot_net_login: login
   auth_dot_net_password: pass
+  include_free_account: false  
   authorization: cancan
