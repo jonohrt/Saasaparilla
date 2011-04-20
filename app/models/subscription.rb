@@ -18,13 +18,11 @@ class Subscription < ActiveRecord::Base
   after_rollback :delete_profile
   after_create :initial_bill
   after_create :send_subscription_created_email
-  before_update :check_if_plan_changed
-  after_update :check_if_should_bill_for_upgrade
-  
+  after_save :check_if_should_bill_for_upgrade, :on => :update
   validates_presence_of :plan, :message => "can't be blank"
   validates_associated :credit_card, :contact_info, :on => :create
   
-  attr_accessor :old_plan_price
+  # attr_accessor :old_plan_price
   
   scope :active, where("status != ?", "canceled")
   
@@ -129,6 +127,12 @@ class Subscription < ActiveRecord::Base
   def cancel
     set_canceled
     send_subscription_cancelled_email
+  end
+  
+  def reactivate!
+    self.balance = 0
+    add_to_balance(plan.price)
+    bill!
   end
   
   def billing_failed
@@ -277,32 +281,32 @@ class Subscription < ActiveRecord::Base
     end
   end
   
-  def check_if_plan_changed
-    if self.plan_id_changed? and !self.new_record?
-      self.old_plan_price = Plan.find(self.plan_id_was).price
-    end
-  end
-  
   def check_if_should_bill_for_upgrade
-    if !self.old_plan_price.nil? and self.old_plan_price < plan.price
-      if billing_date <= Date.today + 5.days
-        balance = plan.price
-        self.old_plan_price = nil
-      else 
-        # Pro-rate
-        if monthly?
-          time_to_credit = billing_date.to_time - Date.today.to_time
-          percentage = time_to_credit / 1.month
-        elsif yearly?
-          time_to_credit = billing_date.to_time - Date.today.to_time
-          percentage = time_to_credit / 1.year
+    if plan_id_changed? && !new_record? && plan_id_was != nil
+      old_plan_price = Plan.find(plan_id_was).price
+      if !old_plan_price.nil? && old_plan_price < plan.price
+        # Upgrade
+        if billing_date <= Date.today + 5.days
+          # For accounts w/ current invoice and close to renew date. Should recieve a few days free on new plan
+          balance = plan.price
+          old_plan_price = nil
+        else 
+          # Pro-rate for account in the middle of billing cycle. Should recieve a credit. 
+          if monthly?
+            time_to_credit = billing_date.to_time - Date.today.to_time
+            percentage = time_to_credit / 1.month
+          elsif yearly?
+            time_to_credit = billing_date.to_time - Date.today.to_time
+            percentage = time_to_credit / 1.year
+          end
+          credit = (old_plan_price * percentage).round(1)
+          old_plan_price = nil
+          @changed_attributes.clear
+          add_to_balance(plan.price - credit)
+          bill!
         end
-        credit = (self.old_plan_price * percentage).round(1)
-        self.old_plan_price = nil
-        @changed_attributes.clear
-        add_to_balance(plan.price - credit)
-        bill!
       end
+      # Do nothing for downgrade. Plan won't change until next cycle.
     end
   end
   

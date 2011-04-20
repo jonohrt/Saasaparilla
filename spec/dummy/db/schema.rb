@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110418213427) do
+ActiveRecord::Schema.define(:version => 20110419234323) do
 
   create_table "billing_activities", :force => true do |t|
     t.float    "amount"
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(:version => 20110418213427) do
 
   create_table "transactions", :force => true do |t|
     t.string   "action"
-    t.integer  "amount"
+    t.float    "amount"
     t.boolean  "success"
     t.string   "authorization"
     t.string   "message"

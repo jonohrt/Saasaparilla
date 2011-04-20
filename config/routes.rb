@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resources :subscriptions, :controller => "saasaparilla/admin/subscriptions"
   end
   
-  resource :subscription, :controller => "saasaparilla/subscription"
+  resource :subscription, :controller => "saasaparilla/subscription" do 
+    get 'reactivate', :on => :member
+  end
   
   scope '/subscription', :name_prefix => 'subscription' do
     resources :payments, :controller => "saasaparilla/payments" 

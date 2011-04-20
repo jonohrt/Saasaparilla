@@ -2,7 +2,7 @@
 
 - if @subscription.status == "canceled"
 	You do not have an active paid subscription. 
-	/ Todo: Activate link
+	= link_to "Reactivate your previous plan", reactivate_subscription_path, :confirm => "Are you sure you want to reactive your previous plan? Your credit card will be billed immediately."
 - else
 	%h2 Plan
 
