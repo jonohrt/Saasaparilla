@@ -12,6 +12,7 @@ class CreateSaasaparillaTables < ActiveRecord::Migration
       t.date :overdue_on
       t.boolean :no_charge, :default => false
       t.integer :plan_id
+      t.integer :downgrade_to_plan_id
       t.timestamps
     end
     
