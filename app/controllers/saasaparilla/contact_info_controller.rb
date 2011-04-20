@@ -1,6 +1,6 @@
 class Saasaparilla::ContactInfoController < ApplicationController
   unloadable
-  
+  include Authentication::InstanceMethods
   before_filter :get_subscription
   before_filter :get_contact_info
   

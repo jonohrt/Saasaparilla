@@ -1,6 +1,6 @@
 class Saasaparilla::SubscriptionController < ApplicationController
   unloadable
-  
+  include Authentication::InstanceMethods
   before_filter :get_subscription, :only => [:show, :destroy]
   before_filter :require_no_subscription, :only => [:new]
   #overide with authorization
@@ -59,4 +59,6 @@ class Saasaparilla::SubscriptionController < ApplicationController
       redirect_to new_subscription_path
     end
   end
+  
+
 end

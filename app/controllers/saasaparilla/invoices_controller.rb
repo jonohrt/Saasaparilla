@@ -1,6 +1,7 @@
 class Saasaparilla::InvoicesController < ApplicationController
   
   unloadable
+  include Authentication::InstanceMethods
   before_filter :get_invoice
   def show
     

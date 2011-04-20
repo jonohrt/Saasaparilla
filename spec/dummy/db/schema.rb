@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(:version => 20110418213427) do
 
   create_table "transactions", :force => true do |t|
     t.string   "action"
-    t.integer  "amount"
+    t.float    "amount"
     t.boolean  "success"
     t.string   "authorization"
     t.string   "message"

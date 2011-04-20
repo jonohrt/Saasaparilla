@@ -1,6 +1,6 @@
 class Saasaparilla::Admin::PlansController < ApplicationController
   unloadable
-
+  include Authentication::InstanceMethods
   include Authorization::InstanceMethods
   
   # GET /plans
