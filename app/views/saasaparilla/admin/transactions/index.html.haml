@@ -1,14 +1,15 @@
-%h1 
-	= "Listing transactions for #{@subscription.email}"
+.saasaparilla
+	%h1 
+		= "Listing transactions for #{@subscription.email}"
 
-%table
-	%tr
-		%th Date
-		%th Amount
-		%th Success
-		%th Action 
-		%th Message
+	%table
+		%tr
+			%th Date
+			%th Amount
+			%th Success
+			%th Action 
+			%th Message
 	
-	= render :partial => "transaction", :collection => @transactions
+		= render :partial => "transaction", :collection => @transactions
 	
-= will_paginate @transactions
+	= will_paginate @transactions

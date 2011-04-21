@@ -1,18 +1,19 @@
-%p
-  %b Name:
-  = @plan.name
-%p
-  %b Billing period:
-  = @plan.billing_period
-%p
-  %b Attributes:
-  %br
-  - @plan.dynamic_attributes.each do |da|
-    = da[0].gsub("field_", "")
-    = ": "
-    = da[1]
+.saasaparilla
+  %p
+    %b Name:
+    = @plan.name
+  %p
+    %b Billing period:
+    = @plan.billing_period
+  %p
+    %b Attributes:
     %br
+    - @plan.dynamic_attributes.each do |da|
+      = da[0].gsub("field_", "")
+      = ": "
+      = da[1]
+      %br
 
-= link_to 'Edit', edit_admin_plan_path(@plan) 
+  = link_to 'Edit', edit_admin_plan_path(@plan) 
 
-= link_to 'Back', admin_plans_path
+  = link_to 'Back', admin_plans_path
