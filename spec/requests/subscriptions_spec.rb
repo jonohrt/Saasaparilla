@@ -70,10 +70,10 @@ describe 'Subscriptions' do
     end
     
     
-    it 'should set subscription status to canceled' do
+    it 'should set subscription status to cancelled' do
       visit subscription_path
       click_on "Cancel Subscription"
-      page.should have_content("Your subscription has been canceled.")
+      page.should have_content("Your subscription has been cancelled.")
     end
   end
   

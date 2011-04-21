@@ -4,9 +4,11 @@
 	= simple_form_for @subscription, :url => subscription_path do |f|
 
 		= f.simple_fields_for :contact_info, @subscription.contact_info do |cif|
+			%h2 Contact info
 			= render :partial => 'contact_info_form', :locals => {:f => cif}
 	
 		= f.simple_fields_for :credit_card, @subscription.credit_card do |cf|
+			%h2 Billing info
 			= render :partial => 'credit_card_form', :locals => {:f => cf}
 	
 		= f.association :plan, :as => 'radio'
