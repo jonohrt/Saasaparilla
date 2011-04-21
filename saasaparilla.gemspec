@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<dynamic_form>, [">= 0"])
   s.add_runtime_dependency(%q<i18n>, [">= 0"])
   s.add_runtime_dependency(%q<active_merchant>, [">= 1.5.2"])
+
   s.add_development_dependency(%q<autotest-growl>, [">= 0"])
   s.add_development_dependency(%q<autotest-fsevent>, [">= 0"])
   s.add_development_dependency(%q<autotest-rails>, [">= 0"])

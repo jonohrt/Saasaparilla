@@ -1,61 +1,62 @@
-%h1 Subscription
+.saasaparilla
+	%h1 Subscription
 
-- if @subscription.status == "canceled"
-	You do not have an active paid subscription. 
-	= link_to "Reactivate your previous plan", reactivate_subscription_path, :confirm => "Are you sure you want to reactive your previous plan? Your credit card will be billed immediately."
-- else
-	%h2 Plan
+	- if @subscription.status == "canceled"
+		You do not have an active paid subscription. 
+		= link_to "Reactivate your previous plan", reactivate_subscription_path, :confirm => "Are you sure you want to reactive your previous plan? Your credit card will be billed immediately."
+	- else
+		%h2 Plan
 
-	%p 
-		= "You are currently subscribed to the #{@subscription.plan.name} plan."
-	%p
-		= link_to "Change plan", edit_subscription_plan_path
+		%p 
+			= "You are currently subscribed to the #{@subscription.plan.name} plan."
+		%p
+			= link_to "Change plan", edit_subscription_plan_path
 
-	%h2 Contact Info
+		%h2 Contact Info
 
-	%p
-		= "#{@subscription.contact_info.first_name} #{@subscription.contact_info.last_name}"
-		%br
-		= @subscription.contact_info.email
-		%br
-		= @subscription.contact_info.address
-		%br
-		= "#{@subscription.contact_info.city}, #{@subscription.contact_info.state} #{@subscription.contact_info.zip}"
-		%br
-		= @subscription.contact_info.country
-		%br
-		= "#{@subscription.contact_info.phone_number}"
-	%p
-		= link_to "Update", edit_subscription_contact_info_path(@subscription.contact_info)
+		%p
+			= "#{@subscription.contact_info.first_name} #{@subscription.contact_info.last_name}"
+			%br
+			= @subscription.contact_info.email
+			%br
+			= @subscription.contact_info.address
+			%br
+			= "#{@subscription.contact_info.city}, #{@subscription.contact_info.state} #{@subscription.contact_info.zip}"
+			%br
+			= @subscription.contact_info.country
+			%br
+			= "#{@subscription.contact_info.phone_number}"
+		%p
+			= link_to "Update", edit_subscription_contact_info_path(@subscription.contact_info)
 	
-	%h2 Billing Info
+		%h2 Billing Info
 
-	%p
-		%label Card Number
-		%br
+		%p
+			%label Card Number
+			%br
 
-		= @subscription.credit_card.card_number
-	%p
-		%label Expiration
-		%br
-		=@subscription.credit_card.expiration_date
-	%p	
-		= link_to "Update", edit_subscription_credit_card_path(@subscription.credit_card)
+			= @subscription.credit_card.card_number
+		%p
+			%label Expiration
+			%br
+			=@subscription.credit_card.expiration_date
+		%p	
+			= link_to "Update", edit_subscription_credit_card_path(@subscription.credit_card)
 	
-	%h2 Billing History
+		%h2 Billing History
 	
-	%p
-		= "Your next billing date is #{@subscription.billing_date.to_s(:month_day_year)}"
+		%p
+			= "Your next billing date is #{@subscription.billing_date.to_s(:month_day_year)}"
 	
-	%table
+		%table
 	
-		= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @subscription.billing_activities.recent.limit(5)
+			= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @subscription.billing_activities.recent.limit(5)
 
 			
 			
-	%p
-		Your subscription was created on
-		= @subscription.created_at.to_s(:month_day_year)
+		%p
+			Your subscription was created on
+			= @subscription.created_at.to_s(:month_day_year)
 
-	%p
-		= link_to "Cancel Subscription", @subscription, :method => "delete", :confirm => "Are you sure you want to cancel your subscription?"
+		%p
+			= link_to "Cancel Subscription", @subscription, :method => "delete", :confirm => "Are you sure you want to cancel your subscription?"

@@ -1,9 +1,10 @@
-%h1 Confirm Payment
+.saasaparilla
+	%h1 Confirm Payment
 
-%p 
-	Payment Amount
-	= number_to_currency(@payment.amount)
+	%p 
+		Payment Amount
+		= number_to_currency(@payment.amount)
 	
-= simple_form_for [:subscription, @payment] do |f|
-	= f.hidden_field :amount, :value => @payment.amount
-	= f.submit "Confirm"
+	= simple_form_for [:subscription, @payment] do |f|
+		= f.hidden_field :amount, :value => @payment.amount
+		= f.submit "Confirm"

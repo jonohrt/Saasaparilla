@@ -1,6 +1,7 @@
-%h1 Update Contact Info
+.saasaparilla
+	%h1 Update Contact Info
 
-= simple_form_for [@subscription, @contact_info] do |f|
-	= render :partial => "saasaparilla/subscription/contact_info_form", :locals =>{:f => f}
+	= simple_form_for [@subscription, @contact_info] do |f|
+		= render :partial => "saasaparilla/subscription/contact_info_form", :locals =>{:f => f}
 	
-	= f.submit "Update Contact Info"
+		= f.submit "Update Contact Info"

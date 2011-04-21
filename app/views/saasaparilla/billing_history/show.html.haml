@@ -1,10 +1,11 @@
-%h1 Billing History
+.saasaparilla
+	%h1 Billing History
 
-%table
-	%tr
-		%th Date
-		%th Description
-		%th Amount
+	%table
+		%tr
+			%th Date
+			%th Description
+			%th Amount
 		
-	= render :partial => "billing_activity", :collection => @billing_activities
+		= render :partial => "billing_activity", :collection => @billing_activities
 		
