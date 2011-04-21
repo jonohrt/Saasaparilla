@@ -1,7 +1,7 @@
 require 'spec_helper'
 include SpecHelpers
 describe 'Plans' do
-  describe "GET /plans" do
+  describe "GET /admin/plans" do
     it "should display plans" do
       Factory.create(:plan, :name => "Gold")
       visit admin_plans_path
@@ -9,7 +9,7 @@ describe 'Plans' do
     end
   end
 
-  describe "POST /plans", :js => "true" do
+  describe "POST /admin/plans", :js => "true" do
     it "should create new plan"  do
       javascript do
         visit new_admin_plan_path

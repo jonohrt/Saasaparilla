@@ -12,7 +12,7 @@ class Saasaparilla::PlansController < ApplicationController
       @subscription.cancel
       redirect_to(subscription_path, :notice => 'You have been downgraded to the free plan.')
       return
-    elsif @subscription.update_attributes(params[:subscription])
+    elsif @subscription.downgrade_plan_to(params[:subscription][:plan_id])
       redirect_to(subscription_path, :notice => 'Plan was successfully changed.')
     else
       render :action => "edit"

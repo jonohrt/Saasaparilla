@@ -12,12 +12,7 @@ describe "Invoices" do
       @subscription.invoice!
     
     end
-    it 'should show invoice'
-    # do
-    #  visit subscription_billing_history_path
-    #  click_on "Invoice"
-    #  page.should have_content("Invoice")
-    # end
+  
     
     
   end
