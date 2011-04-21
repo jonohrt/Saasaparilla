@@ -3,6 +3,7 @@ require "rails"
 require "active_merchant"
 require "action_controller"
 require 'yaml'
+require 'simple_form'
 
 require "dynamic_attributes"
 require 'saasaparilla/authentication'
