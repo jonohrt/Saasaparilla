@@ -49,7 +49,7 @@ class Saasaparilla::SubscriptionController < ApplicationController
   
   def destroy
     if @subscription.cancel
-      flash[:notice] = "Your subscription has been canceled."
+      flash[:notice] = "Your subscription has been cancelled."
       redirect_to subscription_path
       
     end

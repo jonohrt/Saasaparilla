@@ -1,4 +1,4 @@
-= form_for([:admin, @plan]) do |f| 
+= simple_form_for([:admin, @plan]) do |f| 
 	- if @plan.errors.any? 
 		#error_explanation
 			%h2= "#{pluralize(@plan.errors.count, "error")} prohibited this plan from being saved:"
@@ -6,45 +6,28 @@
 			%ul
 				-@plan.errors.full_messages.each do |msg| 
 					%li= msg
-  
-
-	.field
-		= f.label :name
-		%br 
-		= f.text_field :name 
-   
-	.field
-		= f.label :price
-		%br
-		= f.text_field :price
-		
-	.field
-		= f.label :billing_period
-		%br 
-		= f.select :billing_period, Plan::BILLING_PERIODS, :include_blank => false
-  
-	= text_field_tag "attribute_name"
-	= link_to "Add attribute", "#", :id => "add_attribute"
-	%br
-
-	#optional_attributes
-		-begin	
-			- @plan.dynamic_attributes.each do |da|
-				= f.label da[0].gsub("field_", "")
-				= text_field_tag "plan[#{da[0]}]",  da[1]
-				%br
-		- rescue
-
-
 	
-	/ = f.label "field_testing"
-	/ = test_field_tag "plan[]"
-	/ = text_field_tag "plan[field_testing]"
-		
 
+	= f.input :name
+	= f.input :price
+	= f.input :billing_period, :collection => Plan::BILLING_PERIODS, :include_blank => false
+
+	%fieldset
+		%h4 Plan Attributes
+		= f.label "Add new attribute"
+		= text_field_tag "attribute_name"
+		= link_to "Add attribute", "#", :id => "add_attribute"
+		#optional_attributes
+			-begin	
+				- @plan.dynamic_attributes.each do |da|
+					= f.label da[0].gsub("field_", "")
+					= text_field_tag "plan[#{da[0]}]",	da[1]
+					%br
+			- rescue
 
 	.actions
-		= f.submit 
+		= f.submit
+		= link_to 'Cancel', :back
 	
 	:javascript
 		$(document).ready(function(){

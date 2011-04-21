@@ -1,6 +1,3 @@
-%h2 Billing info
-
-
 = f.input :card_type, :collection => CreditCard::CARD_TYPES, :include_blank => false
 - if f.object.new_record?
 	= f.input :card_number

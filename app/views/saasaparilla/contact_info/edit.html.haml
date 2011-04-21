@@ -1,7 +1,8 @@
 .saasaparilla
-	%h1 Update Contact Info
+	%h1 Update Billing Contact Info
 
 	= simple_form_for [@subscription, @contact_info] do |f|
 		= render :partial => "saasaparilla/subscription/contact_info_form", :locals =>{:f => f}
 	
 		= f.submit "Update Contact Info"
+		= link_to "Cancel", :back
