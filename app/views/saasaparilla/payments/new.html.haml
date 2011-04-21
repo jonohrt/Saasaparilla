@@ -4,7 +4,7 @@
 	%strong Current Balance
 	= number_to_currency(@subscription.balance)
 
-	= simple_form_for [@subscription, @payment] do |f|
+	= simple_form_for [@subscription, @payment], :secure => true do |f|
 		= f.input :amount 
 		= f.submit "Submit" 
 

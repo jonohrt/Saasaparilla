@@ -1,6 +1,7 @@
 class Saasaparilla::CreditCardController < ApplicationController
   unloadable
   include Authentication::InstanceMethods
+  ssl_required :edit, :update 
   before_filter :set_subscription
   before_filter :set_credit_cards
   

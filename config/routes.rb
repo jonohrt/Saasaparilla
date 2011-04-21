@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
   
   scope '/subscription', :name_prefix => 'subscription' do
-    resources :payments, :controller => "saasaparilla/payments" 
+    resources :payments, :controller => "saasaparilla/payments"
     resource :credit_card, :controller => "saasaparilla/credit_card"
     resource :plan, :controller => "saasaparilla/plans", :only => [:edit, :update]
     resource :contact_info, :controller => "saasaparilla/contact_info"

@@ -1,6 +1,7 @@
 class Saasaparilla::PaymentsController < ApplicationController
   unloadable
   include Authentication::InstanceMethods
+  ssl_required :new, :create, :edit, :update, :show 
   before_filter :get_subscription
   before_filter :get_payment, :only => [:edit, :update]
   before_filter :check_pending, :only => [:edit, :update]

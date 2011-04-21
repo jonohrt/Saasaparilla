@@ -17,6 +17,7 @@ gem 'activemerchant'
 gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'
+gem 'bartt-ssl_requirement', :require => 'ssl_requirement'
 gem 'i18n'
 group :development, :test do
   gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'

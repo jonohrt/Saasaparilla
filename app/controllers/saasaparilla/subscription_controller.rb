@@ -1,6 +1,6 @@
 class Saasaparilla::SubscriptionController < ApplicationController
   unloadable
-
+  ssl_required :new, :create, :show 
   include Authentication::InstanceMethods
   before_filter :get_subscription, :only => [:show, :destroy, :reactivate]
 

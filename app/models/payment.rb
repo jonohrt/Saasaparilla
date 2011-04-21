@@ -4,6 +4,7 @@ class Payment < ActiveRecord::Base
   validate :valid_amount
   validates_presence_of :subscription_id
   validates_presence_of :amount, :message => "can't be blank"
+  validates_numericality_of :amount
   has_statuses "pending", "paid", "failed"
   belongs_to :subscription
   
@@ -18,7 +19,7 @@ class Payment < ActiveRecord::Base
       errors[:amount] = "cannot be more than your balance"
     end
     if amount == 0
-      error[:amount] = "cannot be zero"
+      errors[:amount] = "cannot be zero"
     end
   end
   

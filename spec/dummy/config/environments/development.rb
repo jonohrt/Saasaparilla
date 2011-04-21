@@ -25,6 +25,6 @@ Dummy::Application.configure do
   
   
   
-
+  SslRequirement.disable_ssl_check = true
 end
 

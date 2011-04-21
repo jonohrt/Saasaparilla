@@ -1,6 +1,6 @@
 .saasaparilla
 	%h1 Subscription
-
+	
 	- if @subscription.status == "canceled"
 		You do not have an active paid subscription. 
 		= link_to "Reactivate your previous plan", reactivate_subscription_path, :confirm => "Are you sure you want to reactive your previous plan? Your credit card will be billed immediately."
@@ -44,7 +44,9 @@
 			= link_to "Update", edit_subscription_credit_card_path(@subscription.credit_card)
 	
 		%h2 Billing History
-	
+		= "Balance: #{number_to_currency(@subscription.balance)}"
+		%br
+		= link_to "Make a payment", new_subscription_payment_path if @subscription.balance > 0
 		%p
 			= "Your next billing date is #{@subscription.billing_date.to_s(:month_day_year)}"
 	

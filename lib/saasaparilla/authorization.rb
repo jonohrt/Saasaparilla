@@ -5,7 +5,7 @@ module Authorization
   module InstanceMethods
     def self.included(base)
       if Saasaparilla::CONFIG["authorization"] == "cancan"
-        base.rescue_from CanCan::AccessDenied do |exception|
+        base.rescue_from ::CanCan::AccessDenied do |exception|
           redirect_to '/'
           flash[:error] = exception.to_s
         end
