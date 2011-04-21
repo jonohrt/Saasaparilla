@@ -5,6 +5,7 @@ class Subscription < ActiveRecord::Base
   has_many :payments
   has_one :contact_info
   belongs_to :plan
+  belongs_to :downgrade_to_plan, :class_name => "Plan", :foreign_key => :downgrade_to_plan_id
   accepts_nested_attributes_for :contact_info
   has_many :billing_activities
   belongs_to :billable, :polymorphic => true
@@ -56,6 +57,8 @@ class Subscription < ActiveRecord::Base
       #find_all_subscriptions need billing
       @billable_subscriptions = Subscription.active.all_paid.all_billable_subscriptions(Date.today)
       for subscription in @billable_subscriptions
+       
+        subscription.downgrade if subscription.downgrade_to_plan.present?
         begin
           subscription.bill!(subscription.balance)
         rescue
@@ -73,6 +76,23 @@ class Subscription < ActiveRecord::Base
     end
   end
   
+  def downgrade
+    self.plan = downgrade_to_plan
+    self.downgrade_to_plan = nil
+    self.balance = plan.price
+    
+    self.save!
+   
+  end
+  
+  def downgrade_plan_to(plan_id)
+  
+    if self.update_attributes(:downgrade_to_plan => Plan.find(plan_id))
+      return true
+    else
+      return false
+    end
+  end
   
   def last_transaction_date
     @transaction = transactions.recent.first
@@ -114,6 +134,7 @@ class Subscription < ActiveRecord::Base
     end
 
   end
+  
   
   def invoice!
     add_to_balance(plan.price)
