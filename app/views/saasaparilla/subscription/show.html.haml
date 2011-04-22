@@ -52,20 +52,18 @@
 	
 		.info
 			%h2 Billing History
-			= "Balance: #{number_to_currency(@subscription.balance)}"
-			%br
-			= link_to "Make a payment", new_subscription_payment_path if @subscription.balance > 0
 			%p
-	
-			%p
+				= "Balance: #{number_to_currency(@subscription.balance)}" 
+				= link_to "Make a payment", new_subscription_payment_path if @subscription.balance > 0
+				%br
 				= "Your next billing date is #{@subscription.billing_date.to_s(:month_day_year)}"
-	
-			%table
-				= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @subscription.billing_activities.recent.limit(5)
-			
-			%p
+				%br
 				Your subscription was created on
 				= @subscription.created_at.to_s(:month_day_year)
+					
+			%table.history-table
+				= render :partial => 'saasaparilla/billing_history/billing_activity', :collection => @subscription.billing_activities.recent.limit(5)
+
 
 		.info
 			%h2 Actions

@@ -1,5 +1,5 @@
 %h2 Account Billing Failed
 
 %p
-   = "Our attempt to charge your credit card $#{@amount} for your #{@subscription.plan.billing_period} subscription to the #{@subscription.plan.name} plan has failed. Please visit #{@url} to fix this problem."
+   = "Our attempt to charge your credit card #{number_to_currency(@amount)} for your #{@subscription.plan.billing_period} subscription to the #{@subscription.plan.name} plan has failed. Please visit #{@url} to fix this problem."
    If you need any assistance, please contact the administrator.
