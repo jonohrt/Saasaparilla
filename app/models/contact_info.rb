@@ -1,17 +1,32 @@
 class ContactInfo < ActiveRecord::Base
   
   belongs_to :subscription, :dependent => :destroy
-  validates_presence_of :first_name, :last_name, :email, :address, :city, :state, :zip, :country
-  validates_format_of   :email, :with => ::Authlogic::Regex.email
-  validates_format_of   :zip, :with => /^\d{5}$/
-  validates_numericality_of :phone_area_code, :phone_prefix, :phone_suffix
-  validates_length_of :phone_area_code, :is => 3
-  validates_length_of :phone_prefix, :is => 3
-  validates_length_of :phone_suffix, :is => 4
-  validates_format_of :phone_number, :with => /\d\d\d-\d\d\d-\d\d\d\d/
-    
-  before_validation :update_phone_number
-  # before_save :validate_phone_number
+  validates_presence_of :first_name, :last_name
+  
+  with_options :if => :require_email? do |contact_info|
+    contact_info.validates_format_of :email, :with => ::Authlogic::Regex.email
+    contact_info.validates_presence_of :email
+  end
+
+  with_options :if => :require_billing_address? do |contact_info|
+    contact_info.validates_presence_of :address
+    contact_info.validates_presence_of :city
+    contact_info.validates_presence_of :state
+    contact_info.validates_presence_of :zip
+    contact_info.validates_presence_of :country
+    contact_info.validates_format_of   :zip, :with => /^\d{5}$/
+  end
+  
+  with_options :if => :require_phone_number? do |contact_info|
+    contact_info.validates_numericality_of :phone_area_code
+    contact_info.validates_numericality_of :phone_prefix
+    contact_info.validates_numericality_of :phone_suffix
+    contact_info.validates_length_of :phone_area_code, :is => 3
+    contact_info.validates_length_of :phone_prefix, :is => 3
+    contact_info.validates_length_of :phone_suffix, :is => 4
+    contact_info.validates_format_of :phone_number, :with => /\d\d\d-\d\d\d-\d\d\d\d/
+    contact_info.before_validation :update_phone_number
+  end
   
   attr_accessor :phone_area_code, :phone_prefix, :phone_suffix
 
@@ -43,6 +58,18 @@ class ContactInfo < ActiveRecord::Base
             :phone_number => phone_number}
   end
   
+  def require_email?
+    Saasaparilla::CONFIG["require_email"] == true
+  end
+
+  def require_billing_address?
+    Saasaparilla::CONFIG["require_billing_address"] == true
+  end
+
+  def require_phone_number?
+    Saasaparilla::CONFIG["require_phone_number"] == true
+  end
+  
   private
   
   def update_phone_number
@@ -50,6 +77,9 @@ class ContactInfo < ActiveRecord::Base
       self.phone_number = "#{@phone_area_code}-#{@phone_prefix}-#{@phone_suffix}"
     end
   end
+  
+
+  
 
   # def validate_phone_number
   #   return_value = true

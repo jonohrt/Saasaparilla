@@ -1,17 +1,20 @@
 = f.input :first_name
 = f.input :last_name
-= f.input :email
-= f.input :address
-= f.input :city
-= f.input :state
-= f.input :zip
-= f.input :country
-.input.string.required
-	= f.label :phone, :required => true
-	= "("
-	= f.text_field :phone_area_code, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
-	= ")"
-	= f.text_field :phone_prefix, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
-	= " - "
-	= f.text_field :phone_suffix, :required => true, :size => 4, :maxlength => 4, :class => "phone_4"
-	= f.error :phone_number, :id => 'phone_error'
+- if @subscription.contact_info.require_email?
+	= f.input :email
+- if @subscription.contact_info.require_billing_address?
+	= f.input :address
+	= f.input :city
+	= f.input :state
+	= f.input :zip
+	= f.input :country
+- if @subscription.contact_info.require_phone_number?
+	.input.string.required
+		= f.label :phone, :required => true
+		= "("
+		= f.text_field :phone_area_code, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
+		= ")"
+		= f.text_field :phone_prefix, :required => true, :size => 3, :maxlength => 3, :class => "phone_3"
+		= " - "
+		= f.text_field :phone_suffix, :required => true, :size => 4, :maxlength => 4, :class => "phone_4"
+		= f.error :phone_number, :id => 'phone_error'

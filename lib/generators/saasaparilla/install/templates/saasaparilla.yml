@@ -6,6 +6,9 @@ development:
   auth_dot_net_password: pass
   include_free_account: false
   authorization: cancan
+  require_billing_address: true
+  require_phone_number: true
+  require_email: true
   
 test:
   grace_period: 10    
@@ -15,7 +18,10 @@ test:
   auth_dot_net_password: pass
   include_free_account: false
   authorization: none
-  
+  require_billing_address: true
+  require_phone_number: true
+  require_email: true
+    
 production:
   grace_period: 10    
   from_email: test@dev.com
@@ -24,3 +30,6 @@ production:
   auth_dot_net_password: pass
   include_free_account: false  
   authorization: cancan
+  require_billing_address: true
+  require_phone_number: true
+  require_email: true

@@ -6,6 +6,9 @@ development:
   auth_dot_net_password: 4QH8JM8929epy2gt
   include_free_account: true
   authorization: none
+  require_billing_address: false
+  require_phone_number: false
+  require_email: false
 
 test:
   grace_period: 10    
@@ -15,7 +18,10 @@ test:
   auth_dot_net_login: 4fQ6B3Uyz
   auth_dot_net_password: 4QH8JM8929epy2gt
   authorization: none
-
+  require_billing_address: true
+  require_phone_number: true
+  require_email: true
+  
 production:
   grace_period: 10    
   from_email: test@dev.com
@@ -24,3 +30,6 @@ production:
   auth_dot_net_password: pass
   include_free_account: false
   authorization: cancan
+  require_billing_address: false
+  require_phone_number: false  
+  require_email: false  

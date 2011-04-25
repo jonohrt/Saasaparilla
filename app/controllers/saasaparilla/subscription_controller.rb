@@ -17,15 +17,12 @@ class Saasaparilla::SubscriptionController < ApplicationController
     
     begin
       if @subscription.save
-        
         redirect_to subscription_path
         flash[:notice] = "Your subscription was successfully created."
       else
         render :action => "new"
         flash[:error] = "Your subscription could not be created due to errors. Please review the form and correct them."
-      
       end
-      
     rescue Exception => e
         flash[:error] = e.message
         render :action => "new"

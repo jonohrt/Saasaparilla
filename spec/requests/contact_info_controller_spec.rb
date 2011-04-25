@@ -5,10 +5,8 @@ describe 'Contact info' do
   describe 'GET /contact' do
     
     before(:each) do
-          
           @plan = Factory.build(:plan, :name => "Gold", :price => 20)
           @contact_info = Factory.build(:contact_info)
-  
           @credit_card = Factory.build(:credit_card)
           @subscription = Factory.build(:subscription, :contact_info => @contact_info, :plan => @plan, :credit_card => @credit_card)
           @user = Factory.create(:user, :subscription => @subscription)
@@ -17,7 +15,6 @@ describe 'Contact info' do
        it 'should display contact form' do
          visit edit_subscription_contact_info_path
          page.should have_content 'Update Billing Contact Info'
-         
        end
     
   end

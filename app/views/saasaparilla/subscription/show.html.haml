@@ -23,15 +23,18 @@
 			%p
 				= "#{@subscription.contact_info.first_name} #{@subscription.contact_info.last_name}"
 				%br
-				= @subscription.contact_info.email
-				%br
-				= @subscription.contact_info.address
-				%br
-				= "#{@subscription.contact_info.city}, #{@subscription.contact_info.state} #{@subscription.contact_info.zip}"
-				%br
-				= @subscription.contact_info.country
-				%br
-				= "#{@subscription.contact_info.phone_number}"
+				- if @subscription.contact_info.require_email?
+					= @subscription.contact_info.email
+					%br
+				- if @subscription.contact_info.require_billing_address?
+					= @subscription.contact_info.address
+					%br
+					= "#{@subscription.contact_info.city}, #{@subscription.contact_info.state} #{@subscription.contact_info.zip}"
+					%br
+					= @subscription.contact_info.country
+					%br
+				- if @subscription.contact_info.require_phone_number?
+					= "#{@subscription.contact_info.phone_number}"
 			%p
 				= link_to "Update", edit_subscription_contact_info_path(@subscription.contact_info)
 	
