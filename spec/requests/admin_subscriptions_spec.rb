@@ -17,7 +17,7 @@ describe "admin/subscriptions" do
   
   it 'should load index page' do
     visit admin_subscriptions_path
-    page.should have_content("Listing Subscriptions")
+    page.should have_content("Subscriptions")
     page.should have_content("bobjones@123.com")
   end
   

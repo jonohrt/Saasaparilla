@@ -16,7 +16,7 @@ describe 'Contact info' do
        
        it 'should display contact form' do
          visit edit_subscription_contact_info_path
-         page.should have_content 'Update Contact Info'
+         page.should have_content 'Update Billing Contact Info'
          
        end
     
