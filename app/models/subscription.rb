@@ -146,7 +146,7 @@ class Subscription < ActiveRecord::Base
   
   def cancel
     set_canceled
-    send_subscription_cancelled_email
+    send_subscription_canceled_email
   end
   
   def reactivate!
@@ -356,8 +356,8 @@ class Subscription < ActiveRecord::Base
     Saasaparilla::Notifier.pending_cancellation_notice(self).deliver
   end
 
-  def send_subscription_cancelled_email
-    Saasaparilla::Notifier.subscription_cancelled(self).deliver
+  def send_subscription_canceled_email
+    Saasaparilla::Notifier.subscription_canceled(self).deliver
   end
   
 end

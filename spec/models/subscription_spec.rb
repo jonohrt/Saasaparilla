@@ -195,7 +195,7 @@ describe Subscription do
       @subscription.billing_activities.count.should == 1
     end
 
-    it 'should reactivate cancelled accounts' do
+    it 'should reactivate canceled accounts' do
       @subscription.update_attributes(:status => "canceled")
       @subscription.reactivate!
       @subscription.status.should == "active"
@@ -207,7 +207,7 @@ describe Subscription do
   
   describe 'billing' do
       before(:each) do
-          @plan = Factory(:plan, :name => "Gold", :price => 20.0)
+          plan = Factory(:plan, :name => "Gold", :price => 20.0)
           plan2 = Factory(:plan, :name => "Gold", :price => 20.0, :billing_period => "annually")
           contact_info1 = Factory.build(:contact_info)
           contact_info2 = Factory.build(:contact_info)
@@ -217,9 +217,9 @@ describe Subscription do
           credit_card2 = Factory.build(:credit_card)
           credit_card3 = Factory.build(:credit_card)
           credit_card4 = Factory.build(:credit_card)
-          @subscription1 = Factory(:subscription, :contact_info => contact_info1,  :plan => @plan, :credit_card => credit_card1)
-          @subscription2 = Factory(:subscription, :contact_info => contact_info2,  :plan => @plan, :credit_card => credit_card2)
-          @subscription3 = Factory(:subscription, :contact_info => contact_info3,  :plan => @plan, :credit_card => credit_card3)
+          @subscription1 = Factory(:subscription, :contact_info => contact_info1,  :plan => plan, :credit_card => credit_card1)
+          @subscription2 = Factory(:subscription, :contact_info => contact_info2,  :plan => plan, :credit_card => credit_card2)
+          @subscription3 = Factory(:subscription, :contact_info => contact_info3,  :plan => plan, :credit_card => credit_card3)
           @subscription4 = Factory(:subscription, :contact_info => contact_info4,  :plan => plan2, :credit_card => credit_card4)
           @subscription1.update_attributes(:balance => 12, :billing_date => Date.today)
           @subscription2.update_attributes(:balance => 12, :billing_date => Date.today)
@@ -325,7 +325,7 @@ describe Subscription do
         @subscription1.reload.canceled?.should == true
       end
 
-      it 'should send subscription_cancelled email if failed over grace period' do
+      it 'should send subscription_canceled email if failed over grace period' do
         ActionMailer::Base.deliveries = [];
         @subscription1.update_attributes(:billing_date => Date.today - 11.days, :status => "overdue")
         @subscription2.update_attributes(:status => 'canceled')
@@ -334,7 +334,7 @@ describe Subscription do
         GATEWAYCIM.success = false
         Subscription.find_and_bill_recurring_subscriptions
         GATEWAYCIM.success = true
-        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription has been cancelled/
+        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription has been canceled/
       end
 
       it 'should send pending_cancellation_notice email if failed and 1 day before over grace period' do
@@ -345,7 +345,7 @@ describe Subscription do
         @subscription3.update_attributes(:status => 'canceled')
         @subscription4.update_attributes(:status => 'canceled')
         Subscription.find_and_bill_recurring_subscriptions
-        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription will be cancelled soon/
+        ActionMailer::Base.deliveries.first.subject.should =~ /Your subscription will be canceled soon/
         GATEWAYCIM.success = true
       end
       
@@ -400,18 +400,6 @@ describe Subscription do
         @subscription1.invoice!
         @subscription1.billing_activities.last.invoice.invoice_line_items.first.to.should == @subscription1.billing_date
       end
-      
-     it 'should downgrade plan at the end of the billing period on downgrade' do
-       @plan2 = Factory(:plan, :name => "silver", :price => "10.00")
-       @subscription1.downgrade_to_plan = @plan2
-       @subscription1.save
-       @subscription1.plan.should == @plan
-       @subscription1.downgrade_to_plan.should == @plan2
-       Subscription.find_and_bill_recurring_subscriptions
-       @subscription1.reload
-       @subscription1.plan.should == @plan2
-       @subscription1.downgrade_to_plan.should == nil
-     end
       
       
     end

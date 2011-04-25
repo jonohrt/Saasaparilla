@@ -27,12 +27,12 @@ class Saasaparilla::Notifier < ActionMailer::Base
   def pending_cancellation_notice(subscription)
     @subscription = subscription
     @url = edit_subscription_credit_card_url
-    mail(:to => subscription.contact_info.email, :subject => "Your subscription will be cancelled soon")
+    mail(:to => subscription.contact_info.email, :subject => "Your subscription will be canceled soon")
   end
 
-  def subscription_cancelled(subscription)
+  def subscription_canceled(subscription)
     @subscription = subscription
-    mail(:to => subscription.contact_info.email, :subject => "Your subscription has been cancelled")
+    mail(:to => subscription.contact_info.email, :subject => "Your subscription has been canceled")
   end
  
 end

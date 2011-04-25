@@ -930,14 +930,14 @@ jQuery.extend({
 			fired,
 			// to avoid firing when already doing so
 			firing,
-			// flag to know if the deferred has been cancelled
-			cancelled,
+			// flag to know if the deferred has been canceled
+			canceled,
 			// the deferred itself
 			deferred  = {
 
 				// done( f1, f2, ...)
 				done: function() {
-					if ( !cancelled ) {
+					if ( !canceled ) {
 						var args = arguments,
 							i,
 							length,
@@ -966,7 +966,7 @@ jQuery.extend({
 
 				// resolve with given context and args
 				resolveWith: function( context, args ) {
-					if ( !cancelled && !fired && !firing ) {
+					if ( !canceled && !fired && !firing ) {
 						// make sure args are available (#8421)
 						args = args || [];
 						firing = 1;
@@ -996,7 +996,7 @@ jQuery.extend({
 
 				// Cancel
 				cancel: function() {
-					cancelled = 1;
+					canceled = 1;
 					callbacks = [];
 					return this;
 				}

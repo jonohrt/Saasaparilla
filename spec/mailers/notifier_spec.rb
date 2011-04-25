@@ -143,7 +143,7 @@ describe 'Notifier' do
   end
   
   
-  describe 'subscription cancelled email' do
+  describe 'subscription canceled email' do
 
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
@@ -151,7 +151,7 @@ describe 'Notifier' do
    
       credit_card = Factory.build(:credit_card)
       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
-      @email = Saasaparilla::Notifier.subscription_cancelled(@subscription)
+      @email = Saasaparilla::Notifier.subscription_canceled(@subscription)
     end
     
     it "should deliver to the subscription passed in" do
@@ -159,7 +159,7 @@ describe 'Notifier' do
     end
     
     it "should contain the plan in the mail body" do
-      @email.should have_body_text(/Your subscription has been cancelled/)
+      @email.should have_body_text(/Your subscription has been canceled/)
     end
     
   end

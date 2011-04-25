@@ -28,7 +28,7 @@ class Saasaparilla::Admin::SubscriptionsController < ApplicationController
     @subscription = Subscription.find(params[:id])
     @subscription.cancel
     redirect_to admin_subscription_path(@subscription)
-    flash[:notice] = "Subscription was cancelled."
+    flash[:notice] = "Subscription was canceled."
   end
   
 end

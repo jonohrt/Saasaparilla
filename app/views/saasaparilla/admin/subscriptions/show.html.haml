@@ -40,7 +40,7 @@
 	.info
 		%h2 Actions
 		%p
-			= link_to "Cancel Subscription", cancel_admin_subscription_path(@subscription), :confirm => "Are you sure you want to cancel this subscription?" unless @subscription.status == "cancelled" 
+			= link_to "Cancel Subscription", cancel_admin_subscription_path(@subscription), :confirm => "Are you sure you want to cancel this subscription?" unless @subscription.status == "canceled" 
 			%br
 			- if @subscription.no_charge
 				= link_to "Revoke complimentary subscription", toggle_no_charge_admin_subscription_path(@subscription), :confirm => "Are you sure you want to comp this subscription?"
