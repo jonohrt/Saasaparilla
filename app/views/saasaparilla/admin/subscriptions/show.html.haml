@@ -6,11 +6,15 @@
 		%p
 			= "#{@subscription.first_name} #{@subscription.last_name}"
 			%br
-			= @subscription.address
+			= @subscription.contact_info.email
 			%br
-			= "#{@subscription.city}, #{@subscription.state} #{@subscription.zip}"
-			%br
-			= "#{@subscription.phone_number}"
+			- if @subscription.contact_info.require_billing_address?
+				= @subscription.address
+				%br
+				= "#{@subscription.city}, #{@subscription.state} #{@subscription.zip}"
+				%br
+			- if @subscription.contact_info.require_phone_number?
+				= "#{@subscription.phone_number}"
 
 	.info
 		%h2 Subscription Details
