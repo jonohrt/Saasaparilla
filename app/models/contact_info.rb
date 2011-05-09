@@ -2,11 +2,8 @@ class ContactInfo < ActiveRecord::Base
   
   belongs_to :subscription, :dependent => :destroy
   validates_presence_of :first_name, :last_name
-  
-  with_options :if => :require_email? do |contact_info|
-    contact_info.validates_format_of :email, :with => ::Authlogic::Regex.email
-    contact_info.validates_presence_of :email
-  end
+  validates_format_of :email, :with => ::Authlogic::Regex.email
+  validates_presence_of :email
 
   with_options :if => :require_billing_address? do |contact_info|
     contact_info.validates_presence_of :address
@@ -58,9 +55,6 @@ class ContactInfo < ActiveRecord::Base
             :phone_number => phone_number}
   end
   
-  def require_email?
-    Saasaparilla::CONFIG["require_email"] == true
-  end
 
   def require_billing_address?
     Saasaparilla::CONFIG["require_billing_address"] == true

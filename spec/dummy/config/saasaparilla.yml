@@ -8,7 +8,6 @@ development:
   authorization: none
   require_billing_address: false
   require_phone_number: false
-  require_email: false
 
 test:
   grace_period: 10    
@@ -20,7 +19,6 @@ test:
   authorization: none
   require_billing_address: true
   require_phone_number: true
-  require_email: true
   
 production:
   grace_period: 10    
@@ -32,4 +30,3 @@ production:
   authorization: cancan
   require_billing_address: false
   require_phone_number: false  
-  require_email: false  

@@ -23,9 +23,8 @@
 			%p
 				= "#{@subscription.contact_info.first_name} #{@subscription.contact_info.last_name}"
 				%br
-				- if @subscription.contact_info.require_email?
-					= @subscription.contact_info.email
-					%br
+				= @subscription.contact_info.email
+				%br
 				- if @subscription.contact_info.require_billing_address?
 					= @subscription.contact_info.address
 					%br

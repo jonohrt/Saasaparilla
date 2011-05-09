@@ -1,7 +1,6 @@
 = f.input :first_name
 = f.input :last_name
-- if @subscription.contact_info.require_email?
-	= f.input :email
+= f.input :email
 - if @subscription.contact_info.require_billing_address?
 	= f.input :address
 	= f.input :city
