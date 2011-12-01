@@ -13,7 +13,7 @@ gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
 gem "jquery-rails"
 gem "dynamic_attributes"
 gem "authlogic"
-gem 'activemerchant', "1.20.0"
+gem 'activemerchant', ">= 1.20.0"
 gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'

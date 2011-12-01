@@ -24,11 +24,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<jquery-rails>, [">= 0"])
   s.add_runtime_dependency(%q<dynamic_attributes>, [">= 0"])
   s.add_runtime_dependency(%q<authlogic>, [">= 0"])
-  s.add_runtime_dependency(%q<active_merchant>, [">= 0"])
+  s.add_runtime_dependency(%q<activemerchant>, [">= 0"])
   s.add_runtime_dependency(%q<simple_form>, [">= 0"])
   s.add_runtime_dependency(%q<dynamic_form>, [">= 0"])
   s.add_runtime_dependency(%q<i18n>, [">= 0"])
-  s.add_runtime_dependency(%q<active_merchant>, [">= 1.5.2"])
+  s.add_runtime_dependency(%q<activemerchant>, [">= 1.20.0"])
 
   s.add_development_dependency(%q<autotest-growl>, [">= 0"])
   s.add_development_dependency(%q<autotest-fsevent>, [">= 0"])
