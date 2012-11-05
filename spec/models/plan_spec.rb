@@ -5,7 +5,9 @@ describe Plan do
   it {should validate_presence_of :billing_period}
   it {should validate_numericality_of :price}
   it {should validate_presence_of :price}
-  it {should allow_mass_assignment_of [:name, :billing_period]}
+  it {should allow_mass_assignment_of :name}
+  it {should allow_mass_assignment_of :billing_period}
+  
   it { should have_many :subscriptions}
 
   it 'should have dynamic attributes' do 

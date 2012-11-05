@@ -70,7 +70,7 @@ describe 'CreditCard' do
       select (Date.today.year + 1).to_s, :from => "Expiry year"
       click_on("Update Card")
       page.should have_content("XXXXXXXXXXXX1111")
-      page.should have_content("10/2011")
+      page.should have_content("10/#{(Date.today.year + 1)}")
     end
     
   end

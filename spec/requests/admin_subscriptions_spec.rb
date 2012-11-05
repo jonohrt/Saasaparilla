@@ -23,7 +23,8 @@ describe "admin/subscriptions" do
   
   it 'should load subscription show path' do
     visit admin_subscriptions_path
-    click_on("Show Detail")
+ 
+    page.first('a').find(:xpath,"..").click_link("Show Detail")
     page.should have_content("Subscription Details")
     
   end

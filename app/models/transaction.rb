@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
   belongs_to :billing_activity
   after_create :generate_billing_activity
   
+  attr_accessible :action, :amount, :response, :subscription
   
   def response=(response)
     self.success       = response.success?

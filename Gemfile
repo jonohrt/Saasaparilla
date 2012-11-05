@@ -1,19 +1,19 @@
 source "http://rubygems.org"
 
 gemspec
-gem "rails", "3.0.5"
+gem "rails", "3.0.6"
 
 gem "sqlite3"
 gem 'haml'
 gem 'will_paginate'
-
+gem "pry"
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
+#gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
 
 gem "jquery-rails"
 gem "dynamic_attributes"
 gem "authlogic"
-gem 'activemerchant', ">= 1.20.0"
+gem 'activemerchant', "1.20.0"
 gem 'simple_form'
 gem 'dynamic_form'
 gem 'state_machine'
@@ -24,7 +24,7 @@ group :development, :test do
 	gem "autotest-growl"
 	gem "autotest-fsevent"
   gem "autotest-rails"
-  gem "factory_girl_rails", ">= 1.0.1"
+  gem "factory_girl_rails", "1.0.1"
   gem "rspec-rails"
 
   gem 'database_cleaner'

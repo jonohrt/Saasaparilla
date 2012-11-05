@@ -23,7 +23,7 @@ describe CreditCard do
     end
   
     it 'should retain expiration date' do
-      @credit_card.expiration_date.should == "10/2011"
+      @credit_card.expiration_date.should == "10/#{Date.today.year + 1}"
     end
   end
   
@@ -47,7 +47,7 @@ describe CreditCard do
             :card_number => "4111111111111111",
             :card_verification => "545",
             :expiry_month => "10",
-            :expiry_year => "2011")
+            :expiry_year => "#{Date.today.year + 1}")
           
      
     end

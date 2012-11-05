@@ -4,6 +4,7 @@
    = "You will be billed in 5 days for the following:"
 
 %table
+   
    - @invoice.invoice_line_items.each do |item|
       %tr
          %td

@@ -16,7 +16,7 @@ module Saasaparilla
       require 'initializers/time_format'
       if File.exists?(Rails.root.to_s + "/config/saasaparilla.yml")
         raw_config = File.read(Rails.root.to_s + "/config/saasaparilla.yml")
-        Saasaparilla::CONFIG = YAML.load(raw_config)[RAILS_ENV]
+        Saasaparilla::CONFIG = YAML.load(raw_config)[Rails.env]
       end
       require 'initializers/auth_dot_net'
       

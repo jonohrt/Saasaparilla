@@ -35,6 +35,7 @@ describe 'Notifier' do
       credit_card = Factory.build(:credit_card)
       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
       @subscription.invoice!
+
       @invoice = BillingActivity.recent.first.invoice
       @email = Saasaparilla::Notifier.invoice_created(@subscription, @invoice)
     end
@@ -118,7 +119,6 @@ describe 'Notifier' do
     before(:all) do
       plan = Factory.build(:plan, :name => "Gold", :price => 20.0)
       contact_info = Factory.build(:contact_info)
-
       credit_card = Factory.build(:credit_card)
       @subscription = Factory.build(:subscription, :contact_info => contact_info, :plan => plan, :credit_card => credit_card)
       @email = Saasaparilla::Notifier.pending_cancellation_notice(@subscription)

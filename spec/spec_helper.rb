@@ -1,5 +1,6 @@
 # Configure Rails Envinronment
 require "spork"
+
 Spork.prefork do
   ENV["RAILS_ENV"] = "test"
 
@@ -24,7 +25,6 @@ Spork.prefork do
   require "capybara/rails"
 
 
-
   Capybara.default_driver   = :rack_test
   Capybara.default_selector = :css
 
@@ -44,6 +44,7 @@ Spork.prefork do
     require 'rspec/expectations'
     #config.include RSpec::Matchers
     require 'action_mailer'
+    include Capybara::DSL
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
     # == Mock Framework
@@ -52,10 +53,12 @@ Spork.prefork do
     config.use_transactional_fixtures = false
   
     config.before(:suite) do
+
       DatabaseCleaner.strategy = :truncation
     end
 
     config.before(:each) do
+
       DatabaseCleaner.start
     end
 

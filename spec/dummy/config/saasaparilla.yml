@@ -14,8 +14,8 @@ test:
   from_email: test@dev.com
   trial_period: 0
   include_free_account: false
-  auth_dot_net_login: 4fQ6B3Uyz
-  auth_dot_net_password: 4QH8JM8929epy2gt
+  auth_dot_net_login: 96CsW6wJ
+  auth_dot_net_password: 4m74Fc7nk2BX4743
   authorization: none
   require_billing_address: true
   require_phone_number: true

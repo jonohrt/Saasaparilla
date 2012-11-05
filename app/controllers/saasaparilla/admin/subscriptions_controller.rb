@@ -6,7 +6,7 @@ class Saasaparilla::Admin::SubscriptionsController < ApplicationController
   
   # GET /admin/subscriptions
   def index
-    @subscriptions = Subscription.all.paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")
+    @subscriptions = Subscription.paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")
   end
   
   def show

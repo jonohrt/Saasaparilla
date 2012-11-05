@@ -3,6 +3,8 @@ class BillingActivity < ActiveRecord::Base
   has_one :invoice
   has_one :transaction
   
+  attr_accessible :action, :amount, :response, :subscription, :invoice, :message
+
   MESSAGES = {:success => "Thank you for your payment."}
   scope :recent, order("created_at DESC")
   

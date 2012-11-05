@@ -30,7 +30,7 @@ Factory.define :credit_card, :class => CreditCard do |f|
   f.card_number "4111111111111111"
   f.card_verification "545"
   f.expiry_month "10"
-  f.expiry_year "2011"
+  f.expiry_year "#{Date.today.year + 1}"
  
 end
 

@@ -5,6 +5,8 @@ class ContactInfo < ActiveRecord::Base
   validates_format_of :email, :with => ::Authlogic::Regex.email
   validates_presence_of :email
 
+  attr_accessible :first_name, :last_name, :email, :address, :city, :state, :zip, :country, :phone_area_code, :phone_prefix, :phone_suffix, :phone_number
+
   with_options :if => :require_billing_address? do |contact_info|
     contact_info.validates_presence_of :address
     contact_info.validates_presence_of :city

@@ -17,7 +17,8 @@ describe 'Subscriptions' do
       fill_in "City", :with => "seattle"
       fill_in "State", :with => "wa"
       fill_in "Zip", :with => "98123"
-      select 'United States', :from => 'Country'
+
+     # select 'United States', :from => 'Country'
       fill_in "subscription_contact_info_attributes_phone_area_code", :with => "206"
       fill_in "subscription_contact_info_attributes_phone_prefix", :with => "123"
       fill_in "subscription_contact_info_attributes_phone_suffix", :with => "1234"
@@ -25,7 +26,7 @@ describe 'Subscriptions' do
       select 'Visa', :from => "Card type"
       fill_in "Card verification", :with => "332"
       select '10', :from => "Expiry month"
-      select Date.today.year.to_s, :from => "Expiry year"
+      select (Date.today.year + 1).to_s, :from => "Expiry year"
       choose 'Gold'
       click_on 'Create Subscription'
       page.should have_content("Your subscription was successfully created.")
@@ -41,7 +42,7 @@ describe 'Subscriptions' do
       fill_in "City", :with => "seattle"
       fill_in "State", :with => "wa"
       fill_in "Zip", :with => "98123"
-      select 'United States', :from => 'Country'
+   #   select 'United States', :from => 'Country'
       fill_in "subscription_contact_info_attributes_phone_area_code", :with => "206"
       fill_in "subscription_contact_info_attributes_phone_prefix", :with => "123"
       fill_in "subscription_contact_info_attributes_phone_suffix", :with => "1234"
@@ -49,7 +50,7 @@ describe 'Subscriptions' do
       select 'Visa', :from => "Card type"
       fill_in "Card verification", :with => "332"
       select '10', :from => "Expiry month"
-      select Date.today.year.to_s, :from => "Expiry year"
+      select (Date.today.year + 1).to_s, :from => "Expiry year"
       choose 'Gold'
       
       click_on 'Create Subscription'

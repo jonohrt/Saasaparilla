@@ -17,6 +17,7 @@ describe 'BillingHistory' do
     end
     
     it 'should load billing histories page' do
+    
       visit subscription_billing_history_path
       page.should have_content "18.00"
       page.should have_content "Thanks for your payment."

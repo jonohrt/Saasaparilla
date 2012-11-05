@@ -11,10 +11,12 @@ class Subscription < ActiveRecord::Base
   belongs_to :billable, :polymorphic => true
   has_one :credit_card
   accepts_nested_attributes_for :credit_card
+  before_validation :set_status
+  before_validation :set_credit_card_name
+  before_create :set_status
   before_create :create_cim_profile
   before_create :create_payment_profile
-  before_validation :set_status, :on => :create
-  before_validation :set_credit_card_name
+ 
   before_create :set_initial_balance
   after_rollback :delete_profile
   after_create :initial_bill
@@ -23,6 +25,7 @@ class Subscription < ActiveRecord::Base
   validates_presence_of :plan, :message => "can't be blank"
   validates_associated :credit_card, :contact_info, :on => :create
   
+  attr_accessible :plan_id, :contact_info_attributes, :credit_card_attributes, :billing_date, :status, :invoice, :invoiced_on, :balance, :plan, :downgrade_to_plan
 
   scope :active, where("status != ?", "canceled")
   
@@ -75,6 +78,10 @@ class Subscription < ActiveRecord::Base
       end
     end
   end
+
+
+
+ 
   
   def downgrade
     self.plan = downgrade_to_plan
@@ -137,9 +144,10 @@ class Subscription < ActiveRecord::Base
   
   
   def invoice!
+
     add_to_balance(plan.price)
     create_invoice
-    self.update_attributes(:invoiced_on => Date.today)
+    self.update_attributes!(:invoiced_on => Date.today)
     #if invoice_subscription
     #  set_next_invoice_date()
   end
@@ -176,10 +184,11 @@ class Subscription < ActiveRecord::Base
   private
   
   def create_invoice
-    @invoice = Invoice.create(:subscription => self, :price => plan.price, :from => get_beginning_of_billing_cycle, :to => billing_date)
+    @invoice = Invoice.create!(:subscription => self, :price => plan.price, :from => get_beginning_of_billing_cycle, :to => billing_date)
   end
   
   def get_beginning_of_billing_cycle
+
     if monthly?
       return billing_date - 1.months
     elsif annually?
@@ -272,7 +281,9 @@ class Subscription < ActiveRecord::Base
   end
   
   def set_status
-    self.status = "active"
+    unless self.status.present?
+     self.status = "active"
+   end
   end
   
   def set_initial_balance
@@ -285,6 +296,7 @@ class Subscription < ActiveRecord::Base
                                                :amount => amount,
                                                :customer_profile_id => customer_cim_id,
                                                :customer_payment_profile_id => customer_payment_profile_id})
+
 
     transaction = self.transactions.create(:action => "purchase", :amount => amount, :response => response, :subscription => self)
     if response.success?

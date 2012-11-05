@@ -7,6 +7,8 @@ class Plan < ActiveRecord::Base
   
   has_many :subscriptions
 
+  attr_accessible :name, :price, :billing_period
+  
   BILLING_PERIODS = ["Monthly", "Annually"]
   
   def respond_to?(method_sym, include_private = false)

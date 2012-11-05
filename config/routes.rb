@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   
-  scope '/admin', :name_prefix => 'admin' do
-    resources :plans, :controller => "saasaparilla/admin/plans"
-    resources :subscriptions, :controller => "saasaparilla/admin/subscriptions" do
+  namespace "admin", :module => 'saasaparilla/admin' do
+    resources :plans
+    resources :subscriptions do
       get 'cancel', :on => :member
       get 'toggle_no_charge', :on => :member
-      resources :transactions, :controller => "saasaparilla/admin/transactions", :only => [:index]
+      resources :transactions, :only => [:index]
     end
   end
   
@@ -13,13 +13,13 @@ Rails.application.routes.draw do
     get 'reactivate', :on => :member
   end
   
-  scope '/subscription', :name_prefix => 'subscription' do
-    resources :payments, :controller => "saasaparilla/payments"
-    resource :credit_card, :controller => "saasaparilla/credit_card"
-    resource :plan, :controller => "saasaparilla/plans", :only => [:edit, :update]
-    resource :contact_info, :controller => "saasaparilla/contact_info"
-    resource :billing_history, :controller => "saasaparilla/billing_history" 
-    resources :invoices, :controller => "saasaparilla/invoices"
+  namespace 'subscription', :module => "saasaparilla" do
+    resources :payments
+    resource :credit_card, :controller => "credit_card"
+    resource :plan,  :only => [:edit, :update]
+    resource :contact_info, :controller => "contact_info"
+    resource :billing_history, :controller => "billing_history"
+    resources :invoices
   end
   
   

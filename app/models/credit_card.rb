@@ -18,6 +18,8 @@ class CreditCard < ActiveRecord::Base
   MONTHS = (1..12).to_a
   YEARS = ((Date.today.year)..(Date.today.year + 8)).to_a
   
+  attr_accessible :card_type, :card_number, :expiry_month, :expiry_year, :card_verification
+
   belongs_to :subscription
   
   before_save :mask_card_number

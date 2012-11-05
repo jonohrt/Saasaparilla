@@ -1,11 +1,11 @@
 .saasaparilla
 	%h1 Create Subscription
 	
-	= simple_form_for @subscription, :url => subscription_path(:secure => true) do |f|
+	= simple_form_for @subscription, :url => subscription_path(:secure => Rails.env == "production") do |f|
 
 		.info
 			%h2 Plan
-			= f.association :plan, :as => 'radio', :label => false
+			= f.association :plan, :as => 'radio_buttons', :label => false
 	
 	
 		= f.simple_fields_for :contact_info, @subscription.contact_info do |cif|

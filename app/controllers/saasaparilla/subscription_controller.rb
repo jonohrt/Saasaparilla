@@ -1,6 +1,6 @@
 class Saasaparilla::SubscriptionController < ApplicationController
   unloadable
-  ssl_required :new, :create, :show 
+  ssl_required :new, :create, :show if Rails.env == "production"
   include Authentication::InstanceMethods
   before_filter :get_subscription, :only => [:show, :destroy, :reactivate]
 
@@ -14,8 +14,7 @@ class Saasaparilla::SubscriptionController < ApplicationController
   
   def create
     @subscription = current_billable.build_subscription(params[:subscription])
-    
-    begin
+    # begin
       if @subscription.save
         redirect_to subscription_path
         flash[:notice] = "Your subscription was successfully created."
@@ -23,11 +22,11 @@ class Saasaparilla::SubscriptionController < ApplicationController
         render :action => "new"
         flash[:error] = "Your subscription could not be created due to errors. Please review the form and correct them."
       end
-    rescue Exception => e
-        flash[:error] = e.message
-        render :action => "new"
-        flash.discard
-    end
+    # rescue Exception => e
+        # flash[:error] = e.message
+        # render :action => "new"
+        # flash.discard
+    # end
   end
   
   def show
